@@ -1,0 +1,8 @@
+<Project>
+    <PropertyGroup>
+        <BuildFolder>$(MSBuildThisFileDirectory)..\Build\</BuildFolder>
+        <OutputPath>$(BuildFolder)$(Configuration)\</OutputPath>
+        <BaseIntermediateOutputPath>$(BuildFolder)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+</Project>
