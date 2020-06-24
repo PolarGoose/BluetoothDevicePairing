@@ -8,61 +8,52 @@ namespace BluetoothDevicePairing.Bluetooth
 {
     internal sealed class DeviceDiscoverer
     {
-        private readonly List<Device> _discoveredDevices = new List<Device>();
-        private readonly DeviceWatcher _watcher;
-        private readonly AutoResetEvent _watcherStopped = new AutoResetEvent(false);
-
-        public DeviceDiscoverer()
+        public static List<Device> DiscoverBluetoothDevices(int timeoutInSec)
         {
-            _watcher = DeviceInformation.CreateWatcher(GetAqsFilter(), null, DeviceInformationKind.AssociationEndpoint);
-            _watcher.Added += OnNewDeviceDiscovered;
-            _watcher.Removed += OnDeviceRemoved;
-            _watcher.Updated += OnDeviceUpdated;
-            _watcher.Stopped += OnStopped;
+            return Discover(AsqFilter.BluetoothDevicesFilter(), timeoutInSec);
         }
 
-        public List<Device> DiscoverDevices()
+        private static List<Device> Discover(AsqFilter filter, int discoveryTimeInSec)
         {
-            var timeToDiscoverInSec = 10;
-            Console.WriteLine($"Start discovering devices for {timeToDiscoverInSec} seconds");
-            _watcher.Start();
-            Thread.Sleep(timeToDiscoverInSec * 1000);
-            _watcher.Stop();
-            _watcherStopped.WaitOne(5 * 1000);
-            if (_discoveredDevices.Count == 0) throw new Exception("No devices were found");
-            Console.WriteLine("Finished discovering");
-            return _discoveredDevices;
+            Console.WriteLine($"Start discovering devices for {discoveryTimeInSec} seconds");
+            if (discoveryTimeInSec < 10)
+            {
+                Console.WriteLine("Warning: discovery time is less than 10 seconds. The discovery result can be unreliable");
+            }
+            if (discoveryTimeInSec < 0)
+            {
+                throw new Exception("Discovery time is less than 0");
+            }
+
+            var devices = new List<Device>();
+            var watcherStopped = new AutoResetEvent(false);
+            var watcher = CreateWatcher(filter, devices, watcherStopped);
+            watcher.Start();
+            Thread.Sleep(discoveryTimeInSec * 1000);
+            watcher.Stop();
+            watcherStopped.WaitOne(5 * 1000);
+            return devices;
         }
 
-        private void OnNewDeviceDiscovered(DeviceWatcher sender, DeviceInformation info)
+        private static DeviceWatcher CreateWatcher(AsqFilter filter, List<Device> devices, AutoResetEvent stoppedEvent)
         {
-            _discoveredDevices.Add(new Device(info));
-        }
+            var watcher =
+                DeviceInformation.CreateWatcher(filter.Query, null, DeviceInformationKind.AssociationEndpoint);
 
-        private void OnDeviceRemoved(DeviceWatcher sender, DeviceInformationUpdate removedDevice)
-        {
-            foreach (var device in _discoveredDevices.Where(device => device.Info.Id == removedDevice.Id))
-                _discoveredDevices.Remove(device);
-        }
+            watcher.Added += (s, info) => { devices.Add(new Device(info)); };
+            watcher.Removed += (s, removedDevice) =>
+            {
+                foreach (var device in devices.Where(device => device.Info.Id == removedDevice.Id))
+                    devices.Remove(device);
+            };
+            watcher.Updated += (s, updatedDevice) =>
+            {
+                foreach (var device in devices.Where(device => device.Info.Id == updatedDevice.Id))
+                    device.Info.Update(updatedDevice);
+            };
+            watcher.Stopped += (s, o) => { stoppedEvent.Set(); };
 
-        private void OnDeviceUpdated(DeviceWatcher sender, DeviceInformationUpdate deviceInfoUpdate)
-        {
-            foreach (var device in _discoveredDevices.Where(device => device.Info.Id == deviceInfoUpdate.Id))
-                device.Info.Update(deviceInfoUpdate);
-        }
-
-        private void OnStopped(DeviceWatcher sender, object obj)
-        {
-            _watcherStopped.Set();
-        }
-
-        private static string GetAqsFilter()
-        {
-            const string bluetooth = "System.Devices.Aep.ProtocolId:=\"{e0cbf06c-cd8b-4647-bb8a-263b43f0f974}\"";
-            const string bluetoothLe = "System.Devices.Aep.ProtocolId:=\"{bb7bb05e-5972-42b5-94fc-76eaa7084d49}\"";
-            const string pairable =
-                "System.Devices.Aep.CanPair:=System.StructuredQueryType.Boolean#True OR System.Devices.Aep.IsPaired:=System.StructuredQueryType.Boolean#True";
-            return $"(({bluetooth}) OR ({bluetoothLe})) AND ({pairable})";
+            return watcher;
         }
     }
 }

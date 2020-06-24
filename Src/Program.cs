@@ -22,7 +22,7 @@ namespace BluetoothDevicePairing
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine($"Failed: {ex.Message}");
                 return 1;
             }
 

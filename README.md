@@ -10,7 +10,7 @@ If you want to run a non self contained version of this application you need to 
 * Download and unpack the latest release. The application has two versions:
     * `BluetoothDevicePairing.zip` - small executable which requires `.NET Core 3.1` or higher to be installed on the system.
     * `BluetoothDevicePairing_selfContained.zip` - self contained executable which doesn't requre `.Net Core` runtime to be installed.
-* Run `BluetoothDevicePairing.exe --help` to get usage information and see the `Examples` section bellow.
+* Run `BluetoothDevicePairing.exe --help` and `BluetoothDevicePairing.exe <command> --help` to get usage information and see the `Examples` section bellow.
 
 # Examples
 * Discover devices: `BluetoothDevicePairing.exe discover`

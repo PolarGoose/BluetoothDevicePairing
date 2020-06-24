@@ -1,15 +1,18 @@
-﻿using System;
+using System;
 using Windows.Devices.Enumeration;
 
 namespace BluetoothDevicePairing.Bluetooth
 {
     internal sealed class DevicePairer
     {
-        public void PairDevice(Device device)
+        public static void PairDevice(Device device)
         {
             Console.WriteLine($"Request to pair device \"{device}\"");
 
-            if (device.IsConnected) throw new Exception("Device is already connected, no need to pair");
+            if (device.IsConnected)
+            {
+                throw new Exception("Device is already connected, no need to pair");
+            }
 
             if (device.IsPaired)
             {
@@ -22,11 +25,14 @@ namespace BluetoothDevicePairing.Bluetooth
             Console.WriteLine("Device has been successfully paired");
         }
 
-        public void UnpairDevice(Device device)
+        public static void UnpairDevice(Device device)
         {
             Console.WriteLine($"Request to unpair device \"{device}\"");
 
-            if (!device.IsPaired) throw new Exception("Device is not paired, no need to unpair");
+            if (!device.IsPaired)
+            {
+                throw new Exception("Device is not paired, no need to unpair");
+            }
 
             Unpair(device.Info);
             Console.WriteLine("Device has been successfully unpaired");
@@ -36,7 +42,9 @@ namespace BluetoothDevicePairing.Bluetooth
         {
             var res = device.Pairing.UnpairAsync().GetAwaiter().GetResult().Status;
             if (res != DeviceUnpairingResultStatus.Unpaired)
+            {
                 throw new Exception($"Failed to unpair the device. Status = {res}");
+            }
         }
 
         private static void Pair(DeviceInformation device)
@@ -45,7 +53,10 @@ namespace BluetoothDevicePairing.Bluetooth
 
             var res = device.Pairing.Custom.PairAsync(DevicePairingKinds.ConfirmOnly, DevicePairingProtectionLevel.None)
                 .GetAwaiter().GetResult().Status;
-            if (res != DevicePairingResultStatus.Paired) throw new Exception($"Failed to pair device. Status = {res}");
+            if (res != DevicePairingResultStatus.Paired)
+            {
+                throw new Exception($"Failed to pair device. Status = {res}");
+            }
         }
     }
 }

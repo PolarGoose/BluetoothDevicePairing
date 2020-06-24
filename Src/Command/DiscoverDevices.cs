@@ -1,21 +1,20 @@
 using System;
 using BluetoothDevicePairing.Bluetooth;
+using BluetoothDevicePairing.Command.Utils;
 using CommandLine;
 
 namespace BluetoothDevicePairing.Command
 {
     [Verb("discover", HelpText = "Discover devices")]
-    internal sealed class DiscoverDevicesOptions
+    internal sealed class DiscoverDevicesOptions : CommonOptions
     {
     }
 
     internal sealed class DiscoverDevices
     {
-        private readonly DeviceDiscoverer _discoverer = new DeviceDiscoverer();
-
         public void Execute(DiscoverDevicesOptions opts)
         {
-            var devices = _discoverer.DiscoverDevices();
+            var devices = DeviceDiscoverer.DiscoverBluetoothDevices(opts.DiscoveryTime);
             Console.WriteLine("----------------------------------------------------------");
             foreach (var d in devices) PrintDevice(d);
             Console.WriteLine("----------------------------------------------------------");

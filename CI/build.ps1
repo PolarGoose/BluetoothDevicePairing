@@ -24,7 +24,7 @@ Function CreateZipArchive($fileToArchive, $archiveName) {
 Function Publish($isSelfContained, $destination) {
     Info "Run 'dotnet publish' command: isSelfContained=$isSelfContained destination=$destination"
     dotnet publish `
-        --self-contained "$isSelfContained"`
+        --self-contained "$isSelfContained" `
         -r win-x64 `
         -c Release `
         /p:PublishSingleFile=true `
