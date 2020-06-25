@@ -8,6 +8,9 @@ namespace BluetoothDevicePairing.Command
     [Verb("pair", HelpText = "Pair and connect to a device")]
     internal sealed class PairDeviceOptions : PairAndUnpairDeviceOptions
     {
+        [Option("discovery-time", Default = 10,
+            HelpText = "how long to search for devices. Units: seconds")]
+        public int DiscoveryTime { get; set; }
     }
 
     internal sealed class PairDevice
@@ -16,11 +19,11 @@ namespace BluetoothDevicePairing.Command
         {
             if (!string.IsNullOrEmpty(opts.Mac))
             {
-                PairWithMac(new MacAddress(opts.Mac));
+                PairWithMac(new MacAddress(opts.Mac), opts.DiscoveryTime);
             }
             else if (!string.IsNullOrEmpty(opts.DeviceName))
             {
-                PairWithName(opts.DeviceName);
+                PairWithName(opts.DeviceName, opts.DiscoveryTime);
             }
             else
             {
@@ -28,14 +31,14 @@ namespace BluetoothDevicePairing.Command
             }
         }
 
-        private static void PairWithMac(MacAddress mac)
+        private static void PairWithMac(MacAddress mac, int discoveryTime)
         {
-            DevicePairer.PairDevice(DeviceFinder.FindDeviceByMac(DeviceDiscoverer.DiscoverBluetoothDevices(10), mac));
+            DevicePairer.PairDevice(DeviceFinder.FindDeviceByMac(DeviceDiscoverer.DiscoverBluetoothDevices(discoveryTime), mac));
         }
 
-        private static void PairWithName(string name)
+        private static void PairWithName(string name, int discoveryTime)
         {
-            var devices = DeviceFinder.FindDevicesByName(DeviceDiscoverer.DiscoverBluetoothDevices(10), name);
+            var devices = DeviceFinder.FindDevicesByName(DeviceDiscoverer.DiscoverBluetoothDevices(discoveryTime), name);
             if (devices.Count == 1)
             {
                 DevicePairer.PairDevice(devices[0]);

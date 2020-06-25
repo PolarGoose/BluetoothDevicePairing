@@ -21,3 +21,7 @@ If you want to run a non self contained version of this application you need to 
 
 # Tips and tricks
 * Bluetooth LE devices use mac address randomisation, therefore it is not reliable to pair them using mac address. Use pairing by name instead.
+
+# Build
+* Use `Visual Studio 2019` to open the solution file and work with the code
+* Run `CI\build.ps1` using powershell to build a release

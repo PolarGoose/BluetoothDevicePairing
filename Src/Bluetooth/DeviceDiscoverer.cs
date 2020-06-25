@@ -13,13 +13,14 @@ namespace BluetoothDevicePairing.Bluetooth
             return Discover(AsqFilter.BluetoothDevicesFilter(), timeoutInSec);
         }
 
+        public static List<Device> DiscoverPairedBluetoothDevices(int timeoutInSec)
+        {
+            return Discover(AsqFilter.PairedBluetoothDevicesFilter(), timeoutInSec);
+        }
+
         private static List<Device> Discover(AsqFilter filter, int discoveryTimeInSec)
         {
             Console.WriteLine($"Start discovering devices for {discoveryTimeInSec} seconds");
-            if (discoveryTimeInSec < 10)
-            {
-                Console.WriteLine("Warning: discovery time is less than 10 seconds. The discovery result can be unreliable");
-            }
             if (discoveryTimeInSec < 0)
             {
                 throw new Exception("Discovery time is less than 0");
