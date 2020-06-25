@@ -15,7 +15,7 @@ namespace BluetoothDevicePairing.Command
 
     internal sealed class DiscoverDevices
     {
-        public void Execute(DiscoverDevicesOptions opts)
+        public static void Execute(DiscoverDevicesOptions opts)
         {
             var devices = DeviceDiscoverer.DiscoverBluetoothDevices(opts.DiscoveryTime);
             Console.WriteLine("----------------------------------------------------------");

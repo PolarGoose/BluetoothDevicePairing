@@ -15,7 +15,7 @@ namespace BluetoothDevicePairing.Command
 
     internal sealed class UnPairDevice
     {
-        public void Execute(UnpairDeviceOptions opts)
+        public static void Execute(UnpairDeviceOptions opts)
         {
             if (!string.IsNullOrEmpty(opts.Mac))
             {
@@ -31,12 +31,12 @@ namespace BluetoothDevicePairing.Command
             }
         }
 
-        public void UnpairByMac(MacAddress mac, int discoveryTime)
+        public static void UnpairByMac(MacAddress mac, int discoveryTime)
         {
             DevicePairer.UnpairDevice(DeviceFinder.FindDeviceByMac(DeviceDiscoverer.DiscoverPairedBluetoothDevices(discoveryTime), mac));
         }
 
-        public void UnpairByName(string name, int discoveryTime)
+        public static void UnpairByName(string name, int discoveryTime)
         {
             var devices = DeviceFinder.FindDevicesByName(DeviceDiscoverer.DiscoverPairedBluetoothDevices(discoveryTime), name);
             if (devices.Count > 1)

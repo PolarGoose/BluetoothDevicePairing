@@ -5,7 +5,7 @@ using CommandLine;
 
 namespace BluetoothDevicePairing.Command
 {
-    [Verb("pair", HelpText = "Pair and connect to a device")]
+    [Verb("pair", HelpText = "Pair and connect to a device. If device is paired but not connected, this command unpairs it first and then pairs and connects")]
     internal sealed class PairDeviceOptions : PairAndUnpairDeviceOptions
     {
         [Option("discovery-time", Default = 10,
@@ -15,7 +15,7 @@ namespace BluetoothDevicePairing.Command
 
     internal sealed class PairDevice
     {
-        public void Execute(PairDeviceOptions opts)
+        public static void Execute(PairDeviceOptions opts)
         {
             if (!string.IsNullOrEmpty(opts.Mac))
             {

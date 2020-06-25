@@ -9,9 +9,9 @@ namespace BluetoothDevicePairing
         private static void ParseCommandLineAndExecuteActions(string[] args)
         {
             Parser.Default.ParseArguments<PairDeviceOptions, DiscoverDevicesOptions, UnpairDeviceOptions>(args)
-                .WithParsed<PairDeviceOptions>(opts => new PairDevice().Execute(opts))
-                .WithParsed<UnpairDeviceOptions>(opts => new UnPairDevice().Execute(opts))
-                .WithParsed<DiscoverDevicesOptions>(opts => new DiscoverDevices().Execute(opts));
+                .WithParsed<PairDeviceOptions>(PairDevice.Execute)
+                .WithParsed<UnpairDeviceOptions>(UnPairDevice.Execute)
+                .WithParsed<DiscoverDevicesOptions>(DiscoverDevices.Execute);
         }
 
         private static int Main(string[] args)

@@ -14,10 +14,10 @@ If you want to run a non self contained version of this application you need to 
 
 # Examples
 * Discover devices: `BluetoothDevicePairing.exe discover`
-* Pair and connect to a device using its mac address: `BluetoothDevicePairing.exe pair --mac 12:34:56:78:91:21`
-* Pair and connect to a device using its name: `BluetoothDevicePairing.exe pair --device-name "name of device"`
-* Unpair a device using its mac address: `BluetoothDevicePairing.exe unpair --mac 12:34:56:78:91:21`
-* Unpair a device using its name: `BluetoothDevicePairing.exe unpair --device-name "name of device"`
+* Pair and connect to a device using its mac address: `BluetoothDevicePairing.exe pair --mac 12:34:56:78:9A:BC`
+* Pair and connect to a device using its name: `BluetoothDevicePairing.exe pair --name "name of device"`
+* Unpair a device using its mac address: `BluetoothDevicePairing.exe unpair --mac 12:34:56:78:9A:BC`
+* Unpair a device using its name: `BluetoothDevicePairing.exe unpair --name "name of device"`
 
 # Tips and tricks
 * Bluetooth LE devices use mac address randomisation, therefore it is not reliable to pair them using mac address. Use pairing by name instead.
