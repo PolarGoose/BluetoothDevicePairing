@@ -6,7 +6,7 @@ using CommandLine;
 namespace BluetoothDevicePairing.Command
 {
     [Verb("discover", HelpText = "Discover devices")]
-    internal sealed class DiscoverDevicesOptions
+    internal sealed class DiscoverDevicesOptions : CommonOptions
     {
         [Option("discovery-time", Default = 10,
             HelpText = "how long to search for devices. Units: seconds")]
