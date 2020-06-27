@@ -1,7 +1,5 @@
 Function Info($msg) {
-    Write-Host
-    Write-Host -ForegroundColor DarkGreen "INFO: $msg"
-    Write-Host
+    Write-Host -ForegroundColor DarkGreen "`nINFO: $msg`n"
 }
 
 Function CheckReturnCodeOfPreviousCommand($errorMsg) {
@@ -16,28 +14,29 @@ Function ResolvePath($path) {
     return $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($path)
 }
 
-Function CreateZipArchive($fileToArchive, $archiveName) {
-    Info "Create zip archive: fileToArchive='${fileToArchive}' archiveName='$archiveName'"
-    Compress-Archive -Force -Path $fileToArchive -DestinationPath $archiveName
+Function CreateZipArchive($dir) {
+    Info "Create zip archive ${dir}.zip"
+    Compress-Archive -Force -Path "$dir/*" -DestinationPath "${dir}.zip"
 }
 
-Function Publish($isSelfContained, $destination) {
-    Info "Run 'dotnet publish' command: isSelfContained=$isSelfContained destination=$destination"
+Function Publish($isSelfContained, $slnFile, $outDir) {
+    Info "Run 'dotnet publish' command: isSelfContained=$isSelfContained outDir=$outDir slnFile=$slnFile"
     dotnet publish `
         --self-contained "$isSelfContained" `
-        -r win-x64 `
-        -c Release `
+        --runtime win-x64 `
+        --configuration Release `
+        --output "$outDir" `
         /p:PublishSingleFile=true `
         /p:DebugType=None `
-        --output "$destination" `
         "$slnFile"
     CheckReturnCodeOfPreviousCommand "'dotnet publish' command failed"
-    CreateZipArchive "$destination/${projectName}.exe" "${destination}.zip"
+    CreateZipArchive $outDir
 }
 
+$root = ResolvePath "$PSScriptRoot/.."
 $projectName = "BluetoothDevicePairing"
-$publishDir = ResolvePath "$PSScriptRoot/../Build/Publish"
-$slnFile = ResolvePath "$PSScriptRoot/../$projectName.sln"
+$publishDir = "$root/Build/Publish"
+$slnFile = "$root/$projectName.sln"
 
-Publish true "$publishDir/${projectName}_selfContained"
-Publish false "$publishDir/$projectName"
+Publish true $slnFile "$publishDir/${projectName}_selfContained"
+Publish false $slnFile "$publishDir/$projectName"
