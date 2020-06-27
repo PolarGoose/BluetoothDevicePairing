@@ -23,5 +23,6 @@ If you want to run a non self contained version of this application you need to 
 * Bluetooth LE devices use mac address randomisation, therefore it is not reliable to pair them using mac address. Use pairing by name instead.
 
 # Build
+* Make sure that "git.exe" is in your PATH
 * Use `Visual Studio 2019` to open the solution file and work with the code
-* Run `CI\build.ps1` using powershell to build a release
+* Run `github/workflows/build.ps1` to build a release

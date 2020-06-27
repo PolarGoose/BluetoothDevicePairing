@@ -10,10 +10,6 @@ Function CheckReturnCodeOfPreviousCommand($errorMsg) {
     }
 }
 
-Function ResolvePath($path) {
-    return $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($path)
-}
-
 Function CreateZipArchive($dir) {
     Info "Create zip archive ${dir}.zip"
     Compress-Archive -Force -Path "$dir/*" -DestinationPath "${dir}.zip"
@@ -33,7 +29,7 @@ Function Publish($isSelfContained, $slnFile, $outDir) {
     CreateZipArchive $outDir
 }
 
-$root = ResolvePath "$PSScriptRoot/.."
+$root = Resolve-Path "$PSScriptRoot/../.."
 $projectName = "BluetoothDevicePairing"
 $publishDir = "$root/Build/Publish"
 $slnFile = "$root/$projectName.sln"
