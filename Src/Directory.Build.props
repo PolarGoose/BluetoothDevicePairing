@@ -4,19 +4,6 @@
         <OutputPath>$(BuildFolder)$(Configuration)\</OutputPath>
         <BaseIntermediateOutputPath>$(BuildFolder)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <Version>0.0.0-dev</Version>
     </PropertyGroup>
-
-    <Target Name="GenerateVersion" BeforeTargets="BeforeBuild">
-        <Exec Command="git describe --tags" ConsoleToMSBuild="true">
-            <Output TaskParameter="ConsoleOutput" PropertyName="GitTagFullName" />
-        </Exec>
-
-        <Exec Command="git rev-parse HEAD" ConsoleToMSBuild="true">
-            <Output TaskParameter="ConsoleOutput" PropertyName="GitCommitHash" />
-        </Exec>
-
-        <PropertyGroup>
-            <Version>$([System.Text.RegularExpressions.Regex]::Match($(GitTagFullName), `(\d+\.\d+\.\d+)`))-$(GitCommitHash)</Version>
-        </PropertyGroup>
-    </Target>
 </Project>
