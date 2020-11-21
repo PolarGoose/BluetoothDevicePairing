@@ -3,13 +3,10 @@ Console utility to discover and pair/connect Bluetooth and Bluetooth LE devices.
 The main reason to create this utility was to be able to pair Bluetooth devices from console in the same way it is done by built in into Windows "Bluetooth & other devices" dialog.
 
 # System requirements
-Windows 10 x64.<br>
-If you want to run a non self contained version of this application you need to have [.NET Core 3.1](https://dotnet.microsoft.com/download) or higher installed.
+Windows 10 1809 (10.0.17763) 64bit or higher<br>
 
 # How to use
-* Download and unpack the latest release. The application has two versions:
-    * `BluetoothDevicePairing.zip` - small executable which requires `.NET Core 3.1` or higher to be installed on the system.
-    * `BluetoothDevicePairing_selfContained.zip` - self contained executable which doesn't requre `.Net Core` runtime to be installed.
+* Download and unpack the latest [release](https://github.com/PolarGoose/BluetoothDevicePairing/releases).
 * Run `BluetoothDevicePairing.exe --help` and `BluetoothDevicePairing.exe <command> --help` to get usage information and see the `Examples` section bellow.
 
 # Examples
@@ -24,4 +21,4 @@ If you want to run a non self contained version of this application you need to 
 
 # Build
 * Use `Visual Studio 2019` to open the solution file and work with the code
-* Run `github/workflows/build.ps1` to build a release (to run this script `git.exe` should be in your PATH)
+* Run `.github/workflows/build.ps1` to build a release (to run this script `git.exe` should be in your PATH)

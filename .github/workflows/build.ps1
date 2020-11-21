@@ -15,17 +15,17 @@ Function CheckReturnCodeOfPreviousCommand($msg) {
 }
 
 Function CreateZipArchive($dir) {
-    Info "Create zip archive ${dir}.zip"
+    Info "Create zip archive `n ${dir}.zip"
     Compress-Archive -Force -Path "$dir/*" -DestinationPath "${dir}.zip"
 }
 
 Function GetVersion() {
-    $gitCommand = Get-Command -ErrorAction Stop -Name git
+    $gitCommand = Get-Command -Name git
 
     $nearestTag = & "$gitCommand" describe --exact-match --tags HEAD
     if(-Not $?) {
-        Info "The commit is not tagged. Use 'v0.0.0-dev' instead"
-        $nearestTag = "v0.0.0-dev"
+        Info "The commit is not tagged. Use 'v0.0-dev' as a version instead"
+        $nearestTag = "v0.0-dev"
     }
 
     $commitHash = & "$gitCommand" rev-parse --short HEAD
@@ -34,19 +34,25 @@ Function GetVersion() {
     return "$($nearestTag.Substring(1))-$commitHash"
 }
 
-Function Publish($isSelfContained, $slnFile, $version, $outDir) {
-    Info "Run 'dotnet publish' command: isSelfContained=$isSelfContained outDir=$outDir slnFile=$slnFile"
-    $Env:DOTNET_CLI_TELEMETRY_OPTOUT="true"
+Function Publish($slnFile, $version, $outDir) {
+    Info "Run 'dotnet publish' command: `n slnFile=$slnFile `n version='$version' `n outDir=$outDir"
+
+    $Env:DOTNET_NOLOGO = "true"
+    $Env:DOTNET_CLI_TELEMETRY_OPTOUT = "true"
     dotnet publish `
-        --self-contained "$isSelfContained" `
+        --self-contained true `
         --runtime win-x64 `
         --configuration Release `
-        --output "$outDir" `
+        --output $outDir `
         /property:PublishSingleFile=true `
+        /property:IncludeNativeLibrariesForSelfExtract=true `
+        /property:PublishTrimmed=true `
+        /property:TrimMode=link `
         /property:DebugType=None `
         /property:Version=$version `
-        "$slnFile"
+        $slnFile
     CheckReturnCodeOfPreviousCommand "'dotnet publish' command failed"
+
     CreateZipArchive $outDir
 }
 
@@ -55,13 +61,8 @@ $ErrorActionPreference = "Stop"
 
 $root = Resolve-Path "$PSScriptRoot/../.."
 $projectName = "BluetoothDevicePairing"
-$publishDir = "$root/Build/Publish"
-$slnFile = "$root/$projectName.sln"
 
-$version = GetVersion
-Publish true $slnFile $version "$publishDir/${projectName}_selfContained"
-Publish false $slnFile $version "$publishDir/$projectName"
-
-if ($LastExitCode -ne 0) {
-    Error "LastExitCode is $LastExitCode at the end of the script. Should be 0"
-}
+Publish `
+    -slnFile $root/$projectName.sln `
+    -version (GetVersion) `
+    -outDir $root/Build/Publish/$projectName
