@@ -3,7 +3,7 @@ Console utility to discover and pair/connect Bluetooth and Bluetooth LE devices.
 The main reason to create this utility was to be able to pair Bluetooth devices from console in the same way it is done by built in into Windows "Bluetooth & other devices" dialog.
 
 # System requirements
-Windows 10 1809 (10.0.17763) 64bit or higher<br>
+Windows 10 1809 (10.0.17763) or higher<br>
 
 # How to use
 * Download and unpack the latest [release](https://github.com/PolarGoose/BluetoothDevicePairing/releases).

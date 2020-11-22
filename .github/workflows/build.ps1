@@ -41,7 +41,7 @@ Function Publish($slnFile, $version, $outDir) {
     $Env:DOTNET_CLI_TELEMETRY_OPTOUT = "true"
     dotnet publish `
         --self-contained true `
-        --runtime win-x64 `
+        --runtime win-x86 `
         --configuration Release `
         --output $outDir `
         /property:PublishSingleFile=true `

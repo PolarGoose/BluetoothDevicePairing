@@ -7,14 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BluetoothDevicePairing", "S
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x64 = Debug|x64
-		Release|x64 = Release|x64
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{728939B3-82EA-4471-9CC7-3403EAD1E537}.Debug|x64.ActiveCfg = Debug|x64
-		{728939B3-82EA-4471-9CC7-3403EAD1E537}.Debug|x64.Build.0 = Debug|x64
-		{728939B3-82EA-4471-9CC7-3403EAD1E537}.Release|x64.ActiveCfg = Release|x64
-		{728939B3-82EA-4471-9CC7-3403EAD1E537}.Release|x64.Build.0 = Release|x64
+		{728939B3-82EA-4471-9CC7-3403EAD1E537}.Debug|x86.ActiveCfg = Debug|x86
+		{728939B3-82EA-4471-9CC7-3403EAD1E537}.Debug|x86.Build.0 = Debug|x86
+		{728939B3-82EA-4471-9CC7-3403EAD1E537}.Release|x86.ActiveCfg = Release|x86
+		{728939B3-82EA-4471-9CC7-3403EAD1E537}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
