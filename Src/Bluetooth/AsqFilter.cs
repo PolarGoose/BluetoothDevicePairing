@@ -4,8 +4,8 @@ namespace BluetoothDevicePairing.Bluetooth
 {
     internal sealed class AsqFilter
     {
-		public string Query { get; }
-    
+        public string Query { get; }
+
         private AsqFilter(string query)
         {
             Query = query;
@@ -15,7 +15,7 @@ namespace BluetoothDevicePairing.Bluetooth
         {
             return Query;
         }
-        
+
         public static AsqFilter BluetoothDevicesFilter()
         {
             var paired = PairedBluetoothDevicesFilter();

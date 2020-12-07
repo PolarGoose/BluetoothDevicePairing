@@ -4,7 +4,7 @@ using Windows.Devices.Enumeration;
 
 namespace BluetoothDevicePairing.Bluetooth
 {
-    internal sealed class MacAddress
+    internal sealed class MacAddress : IEquatable<MacAddress>
     {
         public MacAddress(DeviceInformation device)
         {
@@ -25,6 +25,23 @@ namespace BluetoothDevicePairing.Bluetooth
         public override string ToString()
         {
             return Address;
+        }
+
+        public bool Equals(MacAddress other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return Address == other.Address;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ReferenceEquals(this, obj) || obj is MacAddress other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return (Address != null ? Address.GetHashCode() : 0);
         }
     }
 }

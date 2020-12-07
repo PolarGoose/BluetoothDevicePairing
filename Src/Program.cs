@@ -32,6 +32,7 @@ namespace BluetoothDevicePairing
                 {
                     Console.ReadLine();
                 }
+
                 return 1;
             }
         }

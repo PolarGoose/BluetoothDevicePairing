@@ -5,7 +5,8 @@ namespace BluetoothDevicePairing.Command.Utils
     internal class CommonOptions
     {
         [Option("wait-on-error", Default = false,
-            HelpText = "wait for an user input in case of an error. This flag can be useful if you want a console to not disappear to see an error message in case a command failed")]
+            HelpText =
+                "wait for an user input in case of an error. This flag can be useful if you want a console to not disappear to see an error message in case a command failed")]
         public bool WaitOnError { get; set; }
     }
 

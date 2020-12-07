@@ -6,12 +6,12 @@ namespace BluetoothDevicePairing.Command.Utils
 {
     internal sealed class DeviceFinder
     {
-        public static Device FindDeviceByMac(List<Device> devices, MacAddress mac)
+        public static List<Device> FindDevicesByMac(List<Device> devices, MacAddress mac)
         {
-            var res = devices.Find(d => d.Mac.Address == mac.Address);
+            var res = devices.FindAll(d => d.Mac.Equals(mac));
             if (res == null)
             {
-                throw new Exception($"Couldn't find the device with '{mac}' mac address");
+                throw new Exception($"Couldn't find any devices with '{mac}' mac address");
             }
 
             return res;

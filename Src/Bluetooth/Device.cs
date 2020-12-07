@@ -46,7 +46,7 @@ namespace BluetoothDevicePairing.Bluetooth
 
         public override string ToString()
         {
-            return $"name:'{Name}' mac:'{Mac}'";
+            return $"name:'{Name}' mac:'{Mac}' type:'{Type}'";
         }
 
         private static DeviceType GetDeviceType(DeviceInformation device)
