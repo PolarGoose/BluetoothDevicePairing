@@ -30,7 +30,7 @@ namespace BluetoothDevicePairing.Command
 
         private static string GetType(Device d)
         {
-            return d.Type == DeviceType.BluetoothLe ? "LE" : "";
+            return d.Type == Bluetooth.DeviceType.BluetoothLe ? "LE" : "";
         }
 
         private static string GetPairedStatus(Device d)

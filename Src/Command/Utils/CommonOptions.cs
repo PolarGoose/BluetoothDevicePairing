@@ -19,5 +19,10 @@ namespace BluetoothDevicePairing.Command.Utils
         [Option("name", SetName = "name",
             HelpText = "name of a bluetooth device (case sensitive)")]
         public string DeviceName { get; set; }
+
+        [Option("type", Default = DeviceType.Any,
+            HelpText =
+                "type of bluetooth device. You can use this flag if you want to explicitly specify what type of bluetooth devices you want to work with. Possible values (case sensitive): Bluetooth, BluetoothLE, Any")]
+        public DeviceType Type { get; set; }
     }
 }

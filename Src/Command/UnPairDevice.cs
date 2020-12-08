@@ -19,11 +19,11 @@ namespace BluetoothDevicePairing.Command
         {
             if (!string.IsNullOrEmpty(opts.Mac))
             {
-                UnpairByMac(new MacAddress(opts.Mac), opts.DiscoveryTime);
+                UnpairByMac(new MacAddress(opts.Mac), opts.DiscoveryTime, opts.Type);
             }
             else if (!string.IsNullOrEmpty(opts.DeviceName))
             {
-                UnpairByName(opts.DeviceName, opts.DiscoveryTime);
+                UnpairByName(opts.DeviceName, opts.DiscoveryTime, opts.Type);
             }
             else
             {
@@ -31,54 +31,26 @@ namespace BluetoothDevicePairing.Command
             }
         }
 
-        public static void UnpairByMac(MacAddress mac, int discoveryTime)
+        public static void UnpairByMac(MacAddress mac, int discoveryTime, Utils.DeviceType deviceType)
         {
-            var devices = DeviceFinder.FindDevicesByMac(DeviceDiscoverer.DiscoverPairedBluetoothDevices(discoveryTime), mac);
-
-            if (devices.Count == 1)
+            var devices = DeviceFinder.FindDevicesByMac(DeviceDiscoverer.DiscoverPairedBluetoothDevices(discoveryTime), mac, deviceType);
+            if (devices.Count > 1)
             {
-                DevicePairer.UnpairDevice(devices[0]);
-                return;
+                throw new Exception($"{devices.Count} devices found, don't know which one to choose");
             }
 
-            if (devices.Count == 2 && devices[0].Type != devices[1].Type && devices[0].Name == devices[1].Name)
-            {
-                HandleSituation_2_Bluetooth_devices_with_the_same_mac_and_name_found(devices[0], devices[1]);
-                return;
-            }
-
-            throw new Exception($"{devices.Count} devices found, don't know which one to choose");
+            DevicePairer.UnpairDevice(devices[0]);
         }
 
-        public static void UnpairByName(string name, int discoveryTime)
+        public static void UnpairByName(string name, int discoveryTime, Utils.DeviceType deviceType)
         {
-            var devices = DeviceFinder.FindDevicesByName(DeviceDiscoverer.DiscoverPairedBluetoothDevices(discoveryTime), name);
-
-            if (devices.Count == 1)
+            var devices = DeviceFinder.FindDevicesByName(DeviceDiscoverer.DiscoverPairedBluetoothDevices(discoveryTime), name, deviceType);
+            if (devices.Count > 1)
             {
-                DevicePairer.UnpairDevice(devices[0]);
-                return;
+                throw new Exception($"{devices.Count} devices found, don't know which one to choose");
             }
 
-            if (devices.Count == 2 && devices[0].Type != devices[1].Type && devices[0].Mac.Equals(devices[1].Mac))
-            {
-                HandleSituation_2_Bluetooth_devices_with_the_same_mac_and_name_found(devices[0], devices[1]);
-                return;
-            }
-
-            throw new Exception($"{devices.Count} devices found, don't know which one to choose");
-        }
-
-        private static void HandleSituation_2_Bluetooth_devices_with_the_same_mac_and_name_found(Device device1,
-            Device device2)
-        {
-            Console.WriteLine(
-                $"Two devices with the same mac address and name but different bluetooth types found: \"{device1}\"  and \"{device1}\"." +
-                "It is possible that it is one device which advertises itself as Bluetooth and BluetoothLE simultaneously." +
-                "Unpair both of them.");
-
-            DevicePairer.UnpairDevice(device1);
-            DevicePairer.UnpairDevice(device2);
+            DevicePairer.UnpairDevice(devices[0]);
         }
     }
 }
