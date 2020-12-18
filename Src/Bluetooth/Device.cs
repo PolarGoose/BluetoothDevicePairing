@@ -8,7 +8,7 @@ namespace BluetoothDevicePairing.Bluetooth
     internal enum DeviceType
     {
         Bluetooth,
-        BluetoothLe
+        BluetoothLE
     }
 
     internal sealed class Device
@@ -35,7 +35,7 @@ namespace BluetoothDevicePairing.Bluetooth
                     case DeviceType.Bluetooth:
                         var b = BluetoothDevice.FromIdAsync(Info.Id).GetAwaiter().GetResult();
                         return b.ConnectionStatus == BluetoothConnectionStatus.Connected;
-                    case DeviceType.BluetoothLe:
+                    case DeviceType.BluetoothLE:
                         var ble = BluetoothLEDevice.FromIdAsync(Info.Id).GetAwaiter().GetResult();
                         return ble.ConnectionStatus == BluetoothConnectionStatus.Connected;
                 }
@@ -60,7 +60,7 @@ namespace BluetoothDevicePairing.Bluetooth
                 case "Bluetooth":
                     return DeviceType.Bluetooth;
                 case "BluetoothLE":
-                    return DeviceType.BluetoothLe;
+                    return DeviceType.BluetoothLE;
                 default:
                     throw new Exception($"Wrong device type '{type}' extracted from '{device.Id}'");
             }

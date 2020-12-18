@@ -12,6 +12,10 @@ namespace BluetoothDevicePairing.Command
         [Option("discovery-time", Default = 10,
             HelpText = "how long to search for devices. Units: seconds")]
         public int DiscoveryTime { get; set; }
+
+        [Option("pin", Default = "0000",
+            HelpText = "pin code to provide to a device if it requires it for pairing")]
+        public string Pin { get; set; }
     }
 
     internal sealed class PairDevice
@@ -20,11 +24,11 @@ namespace BluetoothDevicePairing.Command
         {
             if (!string.IsNullOrEmpty(opts.Mac))
             {
-                PairWithMac(new MacAddress(opts.Mac), opts.DiscoveryTime, opts.Type);
+                PairWithMac(new MacAddress(opts.Mac), opts.DiscoveryTime, opts.Type, opts.Pin);
             }
             else if (!string.IsNullOrEmpty(opts.DeviceName))
             {
-                PairWithName(opts.DeviceName, opts.DiscoveryTime, opts.Type);
+                PairWithName(opts.DeviceName, opts.DiscoveryTime, opts.Type, opts.Pin);
             }
             else
             {
@@ -32,13 +36,13 @@ namespace BluetoothDevicePairing.Command
             }
         }
 
-        private static void PairWithMac(MacAddress mac, int discoveryTime, Utils.DeviceType deviceType)
+        private static void PairWithMac(MacAddress mac, int discoveryTime, Utils.DeviceType deviceType, string pin)
         {
             var devices = DeviceFinder.FindDevicesByMac(DeviceDiscoverer.DiscoverBluetoothDevices(discoveryTime), mac, deviceType);
 
             if (devices.Count == 1)
             {
-                DevicePairer.PairDevice(devices[0]);
+                DevicePairer.PairDevice(devices[0], pin);
                 return;
             }
 
@@ -52,18 +56,18 @@ namespace BluetoothDevicePairing.Command
                 $"{devices.Count} devices with the mac '{mac}' found. Don't know which one to choose");
         }
 
-        private static void PairWithName(string name, int discoveryTime, Utils.DeviceType deviceType)
+        private static void PairWithName(string name, int discoveryTime, Utils.DeviceType deviceType, string pin)
         {
             var devices = DeviceFinder.FindDevicesByName(DeviceDiscoverer.DiscoverBluetoothDevices(discoveryTime), name, deviceType);
             if (devices.Count == 1)
             {
-                DevicePairer.PairDevice(devices[0]);
+                DevicePairer.PairDevice(devices[0], pin);
                 return;
             }
 
-            if (devices.Count == 2 && devices[0].Type == Bluetooth.DeviceType.BluetoothLe && devices[1].Type == Bluetooth.DeviceType.BluetoothLe)
+            if (devices.Count == 2 && devices[0].Type == Bluetooth.DeviceType.BluetoothLE && devices[1].Type == Bluetooth.DeviceType.BluetoothLE)
             {
-                HandleSituation_2_BluetoothLe_devices_with_the_same_name_found(devices[0], devices[1]);
+                HandleSituation_2_BluetoothLe_devices_with_the_same_name_found(devices[0], devices[1], pin);
                 return;
             }
 
@@ -71,7 +75,7 @@ namespace BluetoothDevicePairing.Command
         }
 
         private static void HandleSituation_2_BluetoothLe_devices_with_the_same_name_found(Device device1,
-            Device device2)
+            Device device2, string pin)
         {
             // BLuetooth LE devices use mac randomization, which can lead to the situation when
             // the user already have the device paired but with different mac address.
@@ -85,7 +89,7 @@ namespace BluetoothDevicePairing.Command
                 Console.WriteLine($"2 devices with the same name found: \"{oldDevice}\" (paired)  and \"{newDevice}\"");
                 Console.WriteLine("Assume that the device changed its mac address");
                 DevicePairer.UnpairDevice(oldDevice);
-                DevicePairer.PairDevice(newDevice);
+                DevicePairer.PairDevice(newDevice, pin);
                 return;
             }
 

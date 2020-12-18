@@ -17,7 +17,7 @@ namespace BluetoothDevicePairing.Command.Utils
             }
 
             if (   type1 == DeviceType.Bluetooth && type2 == Bluetooth.DeviceType.Bluetooth
-                || type1 == DeviceType.BluetoothLE && type2 == Bluetooth.DeviceType.BluetoothLe)
+                || type1 == DeviceType.BluetoothLE && type2 == Bluetooth.DeviceType.BluetoothLE)
             {
                 return true;
             }

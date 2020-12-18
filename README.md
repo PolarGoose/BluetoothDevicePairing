@@ -14,6 +14,7 @@ Windows 10 1809 (10.0.17763) or higher<br>
 * Pair and connect to a device using its mac address: `BluetoothDevicePairing.exe pair --mac 12:34:56:78:9A:BC`
 * Pair and connect to a device using its name: `BluetoothDevicePairing.exe pair --name "name of device"`
 * Pair and connect to a device using its name/mac and device type: `BluetoothDevicePairing.exe pair --name "name of device" --type BluetoothLE`
+* Pair and connect to a device using its name/mac and pin code: `BluetoothDevicePairing.exe pair --mac 12:34:56:78:9A:BC --pin 1234`
 * Unpair a device using its mac address: `BluetoothDevicePairing.exe unpair --mac 12:34:56:78:9A:BC`
 * Unpair a device using its name: `BluetoothDevicePairing.exe unpair --name "name of device"`
 * Unpair a device using its name/mac and device type: `BluetoothDevicePairing.exe unpair --mac 12:34:56:78:9A:BC --type Bluetooth`
@@ -21,6 +22,7 @@ Windows 10 1809 (10.0.17763) or higher<br>
 # Tips and tricks
 * Bluetooth LE devices use mac address randomisation, therefore it is not reliable to pair them using mac address. Use pairing by name instead.
 * Some devices advertize itself as Bluetooth and BluetoothLE simultaneously while having the same mac and name. To work with such devices explicitly specify to which type of device you want to connect using `--type` parameter.
+* Some device require pin code to be paired, use `--pin` parameter to provide PIN code. By default this programm will try to use `0000` as a pin code.
 
 # Build
 * Use `Visual Studio 2019` to open the solution file and work with the code
