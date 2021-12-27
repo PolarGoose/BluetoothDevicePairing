@@ -1,10 +1,10 @@
+using BluetoothDevicePairing.Bluetooth;
 using System;
 using System.Collections.Generic;
-using BluetoothDevicePairing.Bluetooth;
 
 namespace BluetoothDevicePairing.Command.Utils
 {
-    internal sealed class DeviceFinder
+    internal static class DeviceFinder
     {
         public static List<Device> FindDevicesByMac(List<Device> devices, MacAddress mac, DeviceType deviceType)
         {

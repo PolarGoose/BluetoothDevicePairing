@@ -6,7 +6,7 @@ using Windows.Devices.Enumeration;
 
 namespace BluetoothDevicePairing.Bluetooth
 {
-    internal sealed class DeviceDiscoverer
+    internal static class DeviceDiscoverer
     {
         public static List<Device> DiscoverBluetoothDevices(int timeoutInSec)
         {
@@ -45,12 +45,16 @@ namespace BluetoothDevicePairing.Bluetooth
             watcher.Removed += (s, removedDevice) =>
             {
                 foreach (var device in devices.Where(device => device.Info.Id == removedDevice.Id))
+                {
                     devices.Remove(device);
+                }
             };
             watcher.Updated += (s, updatedDevice) =>
             {
                 foreach (var device in devices.Where(device => device.Info.Id == updatedDevice.Id))
+                {
                     device.Info.Update(updatedDevice);
+                }
             };
             watcher.Stopped += (s, o) => { stoppedEvent.Set(); };
 

@@ -3,7 +3,7 @@ using Windows.Devices.Enumeration;
 
 namespace BluetoothDevicePairing.Bluetooth
 {
-    internal sealed class DevicePairer
+    internal static class DevicePairer
     {
         public static void PairDevice(Device device, string pin)
         {

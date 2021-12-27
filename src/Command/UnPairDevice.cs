@@ -1,7 +1,7 @@
-using System;
 using BluetoothDevicePairing.Bluetooth;
 using BluetoothDevicePairing.Command.Utils;
 using CommandLine;
+using System;
 
 namespace BluetoothDevicePairing.Command
 {
@@ -13,7 +13,7 @@ namespace BluetoothDevicePairing.Command
         public int DiscoveryTime { get; set; }
     }
 
-    internal sealed class UnPairDevice
+    internal static class UnPairDevice
     {
         public static void Execute(UnpairDeviceOptions opts)
         {

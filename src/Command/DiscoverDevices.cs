@@ -1,7 +1,7 @@
-using System;
 using BluetoothDevicePairing.Bluetooth;
 using BluetoothDevicePairing.Command.Utils;
 using CommandLine;
+using System;
 
 namespace BluetoothDevicePairing.Command
 {
@@ -13,13 +13,16 @@ namespace BluetoothDevicePairing.Command
         public int DiscoveryTime { get; set; }
     }
 
-    internal sealed class DiscoverDevices
+    internal static class DiscoverDevices
     {
         public static void Execute(DiscoverDevicesOptions opts)
         {
             var devices = DeviceDiscoverer.DiscoverBluetoothDevices(opts.DiscoveryTime);
             Console.WriteLine("----------------------------------------------------------");
-            foreach (var d in devices) PrintDevice(d);
+            foreach (var d in devices)
+            {
+                PrintDevice(d);
+            }
             Console.WriteLine("----------------------------------------------------------");
         }
 

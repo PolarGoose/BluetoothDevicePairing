@@ -52,7 +52,10 @@ namespace BluetoothDevicePairing.Bluetooth
         private static DeviceType GetDeviceType(DeviceInformation device)
         {
             var match = Regex.Match(device.Id, @"(^\w*)(#)");
-            if (!match.Success) throw new Exception($"Failed to extract the device type from the string '{device.Id}'");
+            if (!match.Success)
+            {
+                throw new Exception($"Failed to extract the device type from the string '{device.Id}'");
+            }
 
             var type = match.Groups[1].Value;
             switch (type)

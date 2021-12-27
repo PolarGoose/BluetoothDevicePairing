@@ -22,13 +22,13 @@ Function CreateZipArchive($dir) {
 Function GetVersion() {
     $gitCommand = Get-Command -Name git
 
-    $nearestTag = & "$gitCommand" describe --exact-match --tags HEAD
+    $nearestTag = & $gitCommand describe --exact-match --tags HEAD
     if(-Not $?) {
-        Info "The commit is not tagged. Use 'v0.0-dev' as a version instead"
+        Info "The commit is not tagged. Use 'v0.0-dev' as a tag instead"
         $nearestTag = "v0.0-dev"
     }
 
-    $commitHash = & "$gitCommand" rev-parse --short HEAD
+    $commitHash = & $gitCommand rev-parse --short HEAD
     CheckReturnCodeOfPreviousCommand "Failed to get git commit hash"
 
     return "$($nearestTag.Substring(1))-$commitHash"
@@ -45,7 +45,7 @@ Function Publish($slnFile, $version, $outDir) {
         --configuration Release `
         --output $outDir `
         /property:PublishSingleFile=true `
-        /property:IncludeNativeLibrariesForSelfExtract=true `
+        /property:IncludeAllContentForSelfExtract=true `
         /property:PublishTrimmed=true `
         /property:TrimMode=link `
         /property:DebugType=None `
@@ -65,4 +65,4 @@ $projectName = "BluetoothDevicePairing"
 Publish `
     -slnFile $root/$projectName.sln `
     -version (GetVersion) `
-    -outDir $root/Build/Publish/$projectName
+    -outDir $root/build/Publish/$projectName

@@ -9,14 +9,20 @@ namespace BluetoothDevicePairing.Bluetooth
         public MacAddress(DeviceInformation device)
         {
             var match = Regex.Match(device.Id, @"(..:){5}(..)$");
-            if (!match.Success) throw new Exception($"Failed to extract mac address from the string '{device.Id}'");
+            if (!match.Success)
+            {
+                throw new Exception($"Failed to extract mac address from the string '{device.Id}'");
+            }
             Address = match.Value.ToUpper();
         }
 
         public MacAddress(string mac)
         {
             var match = Regex.Match(mac, @"^(..:){5}(..)$");
-            if (!match.Success) throw new Exception($"MacAddress address '{mac}' is not a valid mac address");
+            if (!match.Success)
+            {
+                throw new Exception($"MacAddress address '{mac}' is not a valid mac address");
+            }
             Address = mac;
         }
 
@@ -29,8 +35,16 @@ namespace BluetoothDevicePairing.Bluetooth
 
         public bool Equals(MacAddress other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (ReferenceEquals(this, other)) return true;
+            if (other is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, other))
+            {
+                return true;
+            }
+
             return Address == other.Address;
         }
 
@@ -41,7 +55,7 @@ namespace BluetoothDevicePairing.Bluetooth
 
         public override int GetHashCode()
         {
-            return (Address != null ? Address.GetHashCode() : 0);
+            return Address != null ? Address.GetHashCode() : 0;
         }
     }
 }

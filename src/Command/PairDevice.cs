@@ -1,7 +1,7 @@
-using System;
 using BluetoothDevicePairing.Bluetooth;
 using BluetoothDevicePairing.Command.Utils;
 using CommandLine;
+using System;
 
 namespace BluetoothDevicePairing.Command
 {
@@ -18,7 +18,7 @@ namespace BluetoothDevicePairing.Command
         public string Pin { get; set; }
     }
 
-    internal sealed class PairDevice
+    internal static class PairDevice
     {
         public static void Execute(PairDeviceOptions opts)
         {

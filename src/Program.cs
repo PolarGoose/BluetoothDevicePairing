@@ -1,11 +1,11 @@
-using System;
 using BluetoothDevicePairing.Command;
 using BluetoothDevicePairing.Command.Utils;
 using CommandLine;
+using System;
 
 namespace BluetoothDevicePairing
 {
-    internal sealed class Program
+    internal static class Program
     {
         private static bool WaitOnError;
 

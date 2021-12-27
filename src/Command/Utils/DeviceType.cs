@@ -1,13 +1,13 @@
 namespace BluetoothDevicePairing.Command.Utils
 {
-    enum DeviceType
+    internal enum DeviceType
     {
         Bluetooth,
         BluetoothLE,
         Any
     }
 
-    static class DeviceTypeExtensions
+    internal static class DeviceTypeExtensions
     {
         public static bool Equals(DeviceType type1, Bluetooth.DeviceType type2)
         {
@@ -16,7 +16,7 @@ namespace BluetoothDevicePairing.Command.Utils
                 return true;
             }
 
-            if (   type1 == DeviceType.Bluetooth && type2 == Bluetooth.DeviceType.Bluetooth
+            if (type1 == DeviceType.Bluetooth && type2 == Bluetooth.DeviceType.Bluetooth
                 || type1 == DeviceType.BluetoothLE && type2 == Bluetooth.DeviceType.BluetoothLE)
             {
                 return true;
