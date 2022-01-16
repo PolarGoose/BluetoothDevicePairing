@@ -1,6 +1,6 @@
 using Windows.Devices.Bluetooth;
 
-namespace BluetoothDevicePairing.Bluetooth
+namespace BluetoothDevicePairing.Bluetooth.Devices
 {
     internal sealed class AsqFilter
     {

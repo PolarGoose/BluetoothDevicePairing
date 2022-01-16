@@ -1,5 +1,5 @@
 # BluetoothDevicePairing
-Console utility to discover and pair/connect Bluetooth and Bluetooth LE devices.
+Console utility to discover and pair or connect to Bluetooth and Bluetooth Low Energy devices.
 
 # System requirements
 Windows 10 1809 (10.0.17763) or higher
@@ -15,40 +15,40 @@ BluetoothDevicePairing.exe discover
 ```
 * Pair and connect to a device using its mac address:
 ```
-BluetoothDevicePairing.exe pair --mac 12:34:56:78:9A:BC
+BluetoothDevicePairing.exe pair-by-mac --mac 12:34:56:78:9A:BC --type Bluetooth
 ```
 * Pair and connect to a device using its name:
 ```
-BluetoothDevicePairing.exe pair --name "name of device"
+BluetoothDevicePairing.exe pair-by-name --name "MX Ergo" --type BluetoothLE
 ```
-* Pair and connect to a device using its name/mac and device type:
+* Pair and connect to a device using its name and pin code:
 ```
-BluetoothDevicePairing.exe pair --name "name of device" --type BluetoothLE
+BluetoothDevicePairing.exe pair-by-name --name "Device name" --type BluetoothLE --pin 1234
 ```
-* Pair and connect to a device using its name/mac and pin code:
+* Pair and connect to a device using its mac and pin code:
 ```
-BluetoothDevicePairing.exe pair --mac 12:34:56:78:9A:BC --pin 1234
+BluetoothDevicePairing.exe pair-by-mac --mac 12:34:56:78:9A:BC --type Bluetooth --pin 1234
 ```
 * Unpair a device using its mac address:
 ```
-BluetoothDevicePairing.exe unpair --mac 12:34:56:78:9A:BC
+BluetoothDevicePairing.exe unpair-by-mac --mac 12:34:56:78:9A:BC --type Bluetooth
 ```
 * Unpair a device using its name:
 ```
-BluetoothDevicePairing.exe unpair --name "name of device"
-```
-* Unpair a device using its name/mac and device type:
-```
-BluetoothDevicePairing.exe unpair --mac 12:34:56:78:9A:BC --type Bluetooth
+BluetoothDevicePairing.exe unpair-by-name --name "MX Ergo" --type BluetoothLE
 ```
 
 # How it works
 The program uses [Windows.Devices.Enumeration API](https://docs.microsoft.com/en-us/uwp/api/Windows.Devices.Enumeration?redirectedfrom=MSDN&view=winrt-22000) to work with Bluetooth.
 
-# Tips and tricks
-* Bluetooth LE devices use mac address randomisation, therefore it is not reliable to pair them using mac address. Use pairing by name instead.
-* Some devices advertize itself as Bluetooth and BluetoothLE simultaneously while having the same mac and name. To work with such devices explicitly specify to which type of device you want to connect using `--type` parameter.
-* Some device require pin code to be paired, use `--pin` parameter to provide PIN code. By default this programm will try to use `0000` as a pin code.
+## Device pairing by mac
+The utility gets the default bluetooth adapter and generates the bluetooth device id using combination of bluetooth type, adapter mac address and device's mac address. Using this id, it is possible to request to pair or unpair the device.
+
+## Device pairing by name
+The utility discovers all available devices (for unpairing only paired devices are checked) and tries to find a device with the required name. After that pairing or unpairing is requested for found device. The command will fail if there are several devices with the same name.
+
+# Return values
+In case of failure the command returns value `-1`. In case of success the `0` is returned.
 
 # Build
 * Use `Visual Studio 2022` to open the solution file and work with the code

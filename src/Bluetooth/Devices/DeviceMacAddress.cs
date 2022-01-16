@@ -2,11 +2,11 @@ using System;
 using System.Text.RegularExpressions;
 using Windows.Devices.Enumeration;
 
-namespace BluetoothDevicePairing.Bluetooth
+namespace BluetoothDevicePairing.Bluetooth.Devices
 {
-    internal sealed class MacAddress : IEquatable<MacAddress>
+    internal sealed class DeviceMacAddress : IEquatable<DeviceMacAddress>
     {
-        public MacAddress(DeviceInformation device)
+        public DeviceMacAddress(DeviceInformation device)
         {
             var match = Regex.Match(device.Id, @"(..:){5}(..)$");
             if (!match.Success)
@@ -16,7 +16,7 @@ namespace BluetoothDevicePairing.Bluetooth
             Address = match.Value.ToUpper();
         }
 
-        public MacAddress(string mac)
+        public DeviceMacAddress(string mac)
         {
             var match = Regex.Match(mac, @"^(..:){5}(..)$");
             if (!match.Success)
@@ -33,7 +33,7 @@ namespace BluetoothDevicePairing.Bluetooth
             return Address;
         }
 
-        public bool Equals(MacAddress other)
+        public bool Equals(DeviceMacAddress other)
         {
             if (other is null)
             {
@@ -50,7 +50,7 @@ namespace BluetoothDevicePairing.Bluetooth
 
         public override bool Equals(object obj)
         {
-            return ReferenceEquals(this, obj) || obj is MacAddress other && Equals(other);
+            return ReferenceEquals(this, obj) || obj is DeviceMacAddress other && Equals(other);
         }
 
         public override int GetHashCode()

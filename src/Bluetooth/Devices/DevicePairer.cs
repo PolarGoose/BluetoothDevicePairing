@@ -1,11 +1,10 @@
 using System;
-using Windows.Devices.Enumeration;
 
-namespace BluetoothDevicePairing.Bluetooth
+namespace BluetoothDevicePairing.Bluetooth.Devices
 {
     internal static class DevicePairer
     {
-        public static void PairDevice(Device device, string pin)
+        public static void PairDevice(Device device, string pinCode)
         {
             Console.WriteLine($"Request to pair device \"{device}\"");
 
@@ -16,40 +15,17 @@ namespace BluetoothDevicePairing.Bluetooth
 
             if (device.IsPaired)
             {
-                Console.WriteLine("Device is already paired, unpair it first");
-                Unpair(device.Info);
+                throw new Exception("Device is already paired");
             }
 
             Console.WriteLine("Start pairing");
-            Pair(device.Info, pin);
+            Pair(device.PairingInfo, pinCode);
             Console.WriteLine("Device has been successfully paired");
         }
 
-        public static void UnpairDevice(Device device)
+        private static void Pair(Windows.Devices.Enumeration.DeviceInformationPairing pairingInfo, string pinCode)
         {
-            Console.WriteLine($"Request to unpair device \"{device}\"");
-
-            if (!device.IsPaired)
-            {
-                throw new Exception("Device is not paired, no need to unpair");
-            }
-
-            Unpair(device.Info);
-            Console.WriteLine("Device has been successfully unpaired");
-        }
-
-        private static void Unpair(DeviceInformation device)
-        {
-            var res = device.Pairing.UnpairAsync().GetAwaiter().GetResult().Status;
-            if (res != DeviceUnpairingResultStatus.Unpaired)
-            {
-                throw new Exception($"Failed to unpair the device. Status = {res}");
-            }
-        }
-
-        private static void Pair(DeviceInformation device, string pin)
-        {
-            device.Pairing.Custom.PairingRequested += (s, a) => PairingRequestedHandler(s, a, pin);
+            pairingInfo.Custom.PairingRequested += (s, a) => PairingRequestedHandler(s, a, pinCode);
 
             // DeviceInformation.Pairing.PairAsync function doesn't work for non UWP applications. Thus, DeviceInformation.Pairing.Custom.PairAsync is used.
             // https://stackoverflow.com/questions/45191412/deviceinformation-pairasync-not-working-in-wpf
@@ -59,31 +35,35 @@ namespace BluetoothDevicePairing.Bluetooth
             // the PairingRequestedHandler was called with PairingKind equal to DevicePairingKinds.DisplayPin instead of DevicePairingKinds.ProvidePin, which made pairing fail.
             // Therefore, I decided not to use DevicePairingKinds.DisplayPin flag.
 
-            var res = device.Pairing.Custom
-                .PairAsync(DevicePairingKinds.ConfirmOnly | DevicePairingKinds.ProvidePin | DevicePairingKinds.ConfirmPinMatch, DevicePairingProtectionLevel.None)
-                .GetAwaiter().GetResult().Status;
-            if (res != DevicePairingResultStatus.Paired)
+            var res = pairingInfo.Custom.PairAsync(Windows.Devices.Enumeration.DevicePairingKinds.ConfirmOnly |
+                                                   Windows.Devices.Enumeration.DevicePairingKinds.ProvidePin |
+                                                   Windows.Devices.Enumeration.DevicePairingKinds.ConfirmPinMatch,
+                                                   Windows.Devices.Enumeration.DevicePairingProtectionLevel.None)
+                                        .GetAwaiter().GetResult().Status;
+            if (res != Windows.Devices.Enumeration.DevicePairingResultStatus.Paired)
             {
                 throw new Exception($"Failed to pair device. Status = {res}");
             }
         }
 
-        private static void PairingRequestedHandler(DeviceInformationCustomPairing sender, DevicePairingRequestedEventArgs args, string pin)
+        private static void PairingRequestedHandler(Windows.Devices.Enumeration.DeviceInformationCustomPairing sender,
+                                                    Windows.Devices.Enumeration.DevicePairingRequestedEventArgs args,
+                                                    string pin)
         {
             switch (args.PairingKind)
             {
-                case DevicePairingKinds.ConfirmOnly:
+                case Windows.Devices.Enumeration.DevicePairingKinds.ConfirmOnly:
                     Console.WriteLine("Pairing mode: ConfirmOnly");
                     args.Accept();
                     return;
 
-                case DevicePairingKinds.ProvidePin:
+                case Windows.Devices.Enumeration.DevicePairingKinds.ProvidePin:
                     Console.WriteLine("Pairing mode: ProvidePin");
                     Console.WriteLine($"Pin is requested by the device. Using '{pin}' as a pin code");
                     args.Accept(pin);
                     return;
 
-                case DevicePairingKinds.ConfirmPinMatch:
+                case Windows.Devices.Enumeration.DevicePairingKinds.ConfirmPinMatch:
                     Console.WriteLine("Pairing mode: ConfirmPinMatch");
                     Console.WriteLine($"The device's pin code: '{args.Pin}'");
                     Console.WriteLine("Waiting for the target device to accept the pairing (you probably need to follow the instructions on the target device's screen)");

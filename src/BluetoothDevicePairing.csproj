@@ -4,6 +4,7 @@
     <Platforms>x86</Platforms>
     <Nullable>disable</Nullable>
     <TargetFramework>net6.0-windows10.0.17763.0</TargetFramework>
+    <Copyright>Console utility to discover and pair or connect to Bluetooth and Bluetooth Low Energy devices.</Copyright>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.9.0-preview1" />

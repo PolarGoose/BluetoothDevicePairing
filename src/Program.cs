@@ -1,5 +1,4 @@
-using BluetoothDevicePairing.Command;
-using BluetoothDevicePairing.Command.Utils;
+using BluetoothDevicePairing.Commands;
 using CommandLine;
 using System;
 
@@ -7,15 +6,18 @@ namespace BluetoothDevicePairing
 {
     internal static class Program
     {
-        private static bool WaitOnError;
-
         private static void ParseCommandLineAndExecuteActions(string[] args)
         {
-            Parser.Default.ParseArguments<PairDeviceOptions, DiscoverDevicesOptions, UnpairDeviceOptions>(args)
-                .WithParsed<CommonOptions>(opts => WaitOnError = opts.WaitOnError)
-                .WithParsed<PairDeviceOptions>(PairDevice.Execute)
-                .WithParsed<UnpairDeviceOptions>(UnPairDevice.Execute)
-                .WithParsed<DiscoverDevicesOptions>(DiscoverDevices.Execute);
+            Parser.Default.ParseArguments<DiscoverDevicesOptions,
+                                          PairDeviceByMacOptions,
+                                          PairDeviceByNameOptions,
+                                          UnpairDeviceByMacOptions,
+                                          UnpairDeviceByNameOptions>(args)
+                  .WithParsed<DiscoverDevicesOptions>(DiscoverDevices.Execute)
+                  .WithParsed<PairDeviceByMacOptions>(PairDeviceByMac.Execute)
+                  .WithParsed<PairDeviceByNameOptions>(PairDeviceByName.Execute)
+                  .WithParsed<UnpairDeviceByMacOptions>(UnPairDeviceByMac.Execute)
+                  .WithParsed<UnpairDeviceByNameOptions>(UnPairDeviceByName.Execute);
         }
 
         private static int Main(string[] args)
@@ -28,12 +30,7 @@ namespace BluetoothDevicePairing
             catch (Exception ex)
             {
                 Console.WriteLine($"Failed: {ex.Message}");
-                if (WaitOnError)
-                {
-                    Console.ReadLine();
-                }
-
-                return 1;
+                return -1;
             }
         }
     }
