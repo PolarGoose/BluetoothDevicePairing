@@ -1,4 +1,3 @@
-using BluetoothDevicePairing.Bluetooth.Adapter;
 using BluetoothDevicePairing.Bluetooth.Devices;
 using System;
 using System.Collections.Generic;
@@ -7,10 +6,10 @@ namespace BluetoothDevicePairing.Commands.Utils
 {
     internal static class DeviceFinder
     {
-        public static List<Device> FindDevicesByName(int discoveryTimeInSeconds, string name, DeviceType deviceType)
+        public static List<Device> FindDevicesByName(DiscoveryTime time, string name, DeviceType deviceType)
         {
-            var devices = DeviceDiscoverer.DiscoverBluetoothDevices(discoveryTimeInSeconds);
-            var res = devices.FindAll(d => d.Name == name && deviceType == d.Type);
+            var devices = DeviceDiscoverer.DiscoverBluetoothDevices(time);
+            var res = devices.FindAll(d => d.Name == name && deviceType == d.Id.DeviceType);
 
             if (res.Count == 0)
             {
@@ -22,16 +21,13 @@ namespace BluetoothDevicePairing.Commands.Utils
 
         public static Device FindDevicesByMac(DeviceMacAddress mac, DeviceType deviceType)
         {
-            Console.WriteLine("Find default bluetooth adapter");
-            var defaultAdapter = AdapterFinder.FindDefaultAdapter();
-            Console.WriteLine($"Default bluetooth adapter found: \"{defaultAdapter}\"");
-
-            var deviceId = $"{deviceType}#{deviceType}{defaultAdapter.MacAddress}-{mac}";
-
-            Console.WriteLine($"Create device information using ID '{deviceId}'");
-            var deviceInfo = Windows.Devices.Enumeration.DeviceInformation.CreateFromIdAsync(deviceId).GetAwaiter().GetResult();
-
-            return new(deviceInfo);
+            if (deviceType == DeviceType.Bluetooth)
+            {
+                Console.WriteLine($"Create Bluetooth device using Mac:'{mac}'");
+                return BluetoothDevice.FromMac(mac);
+            }
+            Console.WriteLine($"Create BluetoothLE device using Mac:'{mac}'");
+            return BluetoothLeDevice.FromMac(mac);
         }
     }
 }

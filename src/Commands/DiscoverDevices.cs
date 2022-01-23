@@ -20,36 +20,23 @@ namespace BluetoothDevicePairing.Commands
     {
         public static void Execute(DiscoverDevicesOptions opts)
         {
-            var devices = DeviceDiscoverer.DiscoverBluetoothDevices(opts.DiscoveryTime).OrderBy(d => d.Name);
-            Console.WriteLine("----------------------------------------------------------");
+            var devices = DeviceDiscoverer.DiscoverBluetoothDevices(new DiscoveryTime(opts.DiscoveryTime)).OrderBy(d => d.Name);
+            Console.WriteLine(new string('-', 73));
             foreach (var d in devices)
             {
                 PrintDevice(d);
             }
-            Console.WriteLine("----------------------------------------------------------");
+            Console.WriteLine(new string('-', 73));
         }
 
         private static void PrintDevice(Device d)
         {
-            Console.WriteLine($"{GetType(d),2}|{d.Mac}|{GetStatus(d),-9}|{GetName(d),-40}|");
+            Console.WriteLine($"|{GetType(d),2}|{d.Id.DeviceMac}|{GetConnectionStatus(d),-9}|{GetName(d),-40}|");
         }
 
         private static string GetType(Device d)
         {
-            return d.Type == DeviceType.BluetoothLE ? "LE" : "";
-        }
-
-        private static string GetStatus(Device d)
-        {
-            if (d.IsConnected)
-            {
-                return "Connected";
-            }
-            if (d.IsPaired)
-            {
-                return "Paired";
-            }
-            return "";
+            return d.Id.DeviceType == DeviceType.BluetoothLE ? "LE" : "";
         }
 
         private static string GetName(Device d)
@@ -59,7 +46,7 @@ namespace BluetoothDevicePairing.Commands
 
         private static string GetConnectionStatus(Device d)
         {
-            return d.IsConnected ? "Connected" : "";
+            return d.ConnectionStatus == ConnectionStatus.NotPaired ? "" : d.ConnectionStatus.ToString();
         }
     }
 }

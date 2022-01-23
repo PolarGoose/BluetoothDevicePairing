@@ -20,7 +20,7 @@ namespace BluetoothDevicePairing.Bluetooth.Adapter
             adapterDevice = Windows.Devices.Bluetooth.BluetoothAdapter.FromIdAsync(bluetoothAdapterInfo.Id).GetAwaiter().GetResult();
             radio = adapterDevice.GetRadioAsync().GetAwaiter().GetResult();
             MacAddress = new AdapterMacAddress(adapterDevice);
-            IsDefault = MacAddress.Equals(defaultAdapterMacAddress);
+            IsDefault = MacAddress.RawAddess == defaultAdapterMacAddress.RawAddess;
         }
 
         public override string ToString()

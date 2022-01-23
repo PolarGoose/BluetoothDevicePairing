@@ -2,7 +2,7 @@ using CommandLine;
 
 namespace BluetoothDevicePairing.Commands.Utils
 {
-    internal class PairAndUnpairDeviceOptions
+    internal class DeviceTypeOption
     {
         [Option("type",
                 Required = true,
@@ -10,7 +10,7 @@ namespace BluetoothDevicePairing.Commands.Utils
         public Bluetooth.Devices.DeviceType DeviceType { get; set; }
     }
 
-    internal class PairAndUnpairDeviceByMacOptions : PairAndUnpairDeviceOptions
+    internal class MacAndDeviceTypeOptions : DeviceTypeOption
     {
         [Option("mac",
                 Required = true,
@@ -18,7 +18,7 @@ namespace BluetoothDevicePairing.Commands.Utils
         public string Mac { get; set; }
     }
 
-    internal class PairAndUnpairDeviceByNameOptions : PairAndUnpairDeviceOptions
+    internal class PairAndUnpairDeviceByNameOptions : DeviceTypeOption
     {
         [Option("discovery-time",
                 Default = 10,

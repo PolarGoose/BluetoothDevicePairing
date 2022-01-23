@@ -37,6 +37,10 @@ BluetoothDevicePairing.exe unpair-by-mac --mac 12:34:56:78:9A:BC --type Bluetoot
 ```
 BluetoothDevicePairing.exe unpair-by-name --name "MX Ergo" --type BluetoothLE
 ```
+* List all Bluetooth adapters available you your machine
+```
+BluetoothDevicePairing.exe list-adapters
+```
 
 # How it works
 The program uses [Windows.Devices.Enumeration API](https://docs.microsoft.com/en-us/uwp/api/Windows.Devices.Enumeration?redirectedfrom=MSDN&view=winrt-22000) to work with Bluetooth.

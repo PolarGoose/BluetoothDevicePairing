@@ -19,7 +19,7 @@ namespace BluetoothDevicePairing.Commands
     {
         public static void Execute(PairDeviceByNameOptions opts)
         {
-            var devices = DeviceFinder.FindDevicesByName(opts.DiscoveryTime, opts.DeviceName, opts.DeviceType);
+            var devices = DeviceFinder.FindDevicesByName(new DiscoveryTime(opts.DiscoveryTime), opts.DeviceName, opts.DeviceType);
 
             if (devices.Count == 1)
             {

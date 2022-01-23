@@ -5,7 +5,7 @@ using CommandLine;
 namespace BluetoothDevicePairing.Commands
 {
     [Verb("unpair-by-mac", HelpText = "Unpair a device using its mac address")]
-    internal sealed class UnpairDeviceByMacOptions : PairAndUnpairDeviceByMacOptions
+    internal sealed class UnpairDeviceByMacOptions : MacAndDeviceTypeOptions
     {
     }
 

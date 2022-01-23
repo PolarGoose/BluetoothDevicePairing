@@ -8,7 +8,7 @@ namespace BluetoothDevicePairing.Bluetooth.Devices
         {
             Console.WriteLine($"Request to unpair device \"{device}\"");
 
-            if (!device.IsPaired)
+            if (device.ConnectionStatus == ConnectionStatus.NotPaired)
             {
                 throw new Exception("Device is not paired");
             }

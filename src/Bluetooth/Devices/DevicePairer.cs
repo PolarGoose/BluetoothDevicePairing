@@ -8,12 +8,12 @@ namespace BluetoothDevicePairing.Bluetooth.Devices
         {
             Console.WriteLine($"Request to pair device \"{device}\"");
 
-            if (device.IsConnected)
+            if (device.ConnectionStatus == ConnectionStatus.Connected)
             {
                 throw new Exception("Device is already connected, no need to pair");
             }
 
-            if (device.IsPaired)
+            if (device.ConnectionStatus == ConnectionStatus.Paired)
             {
                 throw new Exception("Device is already paired");
             }

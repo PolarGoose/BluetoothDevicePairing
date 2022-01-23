@@ -6,7 +6,7 @@ namespace BluetoothDevicePairing.Commands
 {
     [Verb("pair-by-mac",
           HelpText = "Pair and connect to a device using its mac address")]
-    internal sealed class PairDeviceByMacOptions : PairAndUnpairDeviceByMacOptions
+    internal sealed class PairDeviceByMacOptions : MacAndDeviceTypeOptions
     {
         [Option("pin",
                 Default = "0000",
@@ -19,7 +19,6 @@ namespace BluetoothDevicePairing.Commands
         public static void Execute(PairDeviceByMacOptions opts)
         {
             var mac = new DeviceMacAddress(opts.Mac);
-
             var device = DeviceFinder.FindDevicesByMac(mac, opts.DeviceType);
             DevicePairer.PairDevice(device, opts.PinCode);
         }

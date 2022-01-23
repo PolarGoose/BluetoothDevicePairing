@@ -1,6 +1,4 @@
-using Windows.Devices.Bluetooth;
-
-namespace BluetoothDevicePairing.Bluetooth.Devices
+namespace BluetoothDevicePairing.Bluetooth.Devices.Utils
 {
     internal sealed class AsqFilter
     {
@@ -25,15 +23,15 @@ namespace BluetoothDevicePairing.Bluetooth.Devices
 
         public static AsqFilter PairedBluetoothDevicesFilter()
         {
-            var bPaired = BluetoothDevice.GetDeviceSelectorFromPairingState(true);
-            var blePaired = BluetoothLEDevice.GetDeviceSelectorFromPairingState(true);
+            var bPaired = Windows.Devices.Bluetooth.BluetoothDevice.GetDeviceSelectorFromPairingState(true);
+            var blePaired = Windows.Devices.Bluetooth.BluetoothLEDevice.GetDeviceSelectorFromPairingState(true);
             return new AsqFilter($"({bPaired}) OR ({blePaired})");
         }
 
         public static AsqFilter NonPairedBluetoothDevicesFilter()
         {
-            var bNonPaired = BluetoothDevice.GetDeviceSelectorFromPairingState(false);
-            var bleNonPaired = BluetoothLEDevice.GetDeviceSelectorFromPairingState(false);
+            var bNonPaired = Windows.Devices.Bluetooth.BluetoothDevice.GetDeviceSelectorFromPairingState(false);
+            var bleNonPaired = Windows.Devices.Bluetooth.BluetoothLEDevice.GetDeviceSelectorFromPairingState(false);
             return new AsqFilter($"({bNonPaired}) OR ({bleNonPaired})");
         }
     }
