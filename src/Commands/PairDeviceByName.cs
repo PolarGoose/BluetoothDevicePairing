@@ -6,7 +6,7 @@ using System;
 namespace BluetoothDevicePairing.Commands
 {
     [Verb("pair-by-name",
-          HelpText = "Pair and connect to a device using its name.")]
+          HelpText = "Pair a device using its name.")]
     internal sealed class PairDeviceByNameOptions : PairAndUnpairDeviceByNameOptions
     {
         [Option("pin",

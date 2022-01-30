@@ -5,7 +5,7 @@ using CommandLine;
 namespace BluetoothDevicePairing.Commands
 {
     [Verb("pair-by-mac",
-          HelpText = "Pair and connect to a device using its mac address")]
+          HelpText = "Pair a device using its mac address")]
     internal sealed class PairDeviceByMacOptions : MacAndDeviceTypeOptions
     {
         [Option("pin",

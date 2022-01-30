@@ -14,9 +14,9 @@ Function CheckReturnCodeOfPreviousCommand($msg) {
     }
 }
 
-Function CreateZipArchive($dir) {
-    Info "Create zip archive `n ${dir}.zip"
-    Compress-Archive -Force -Path "$dir/*" -DestinationPath "${dir}.zip"
+Function CreateZipArchive($file, $archiveFile) {
+    Info "Archive `n  '$file' `n to `n  '$archiveFile'"
+    Compress-Archive -Force -Path $file -DestinationPath $archiveFile
 }
 
 Function GetVersion() {
@@ -34,35 +34,35 @@ Function GetVersion() {
     return "$($nearestTag.Substring(1))-$commitHash"
 }
 
-Function Publish($slnFile, $version, $outDir) {
-    Info "Run 'dotnet publish' command: `n slnFile=$slnFile `n version='$version' `n outDir=$outDir"
+Function ForceCopy($file, $dstFolder) {
+    Info "Copy `n  '$file' `n to `n  '$dstFolder'"
+    New-Item $publishFolder -Force -ItemType "directory" > $null
+    Copy-Item $buildResultExecutable -Destination $publishFolder -Force
+}
+
+Function Build($slnFile, $version) {
+    Info "Run 'dotnet build' command: `n slnFile=$slnFile `n version='$version'"
 
     $Env:DOTNET_NOLOGO = "true"
     $Env:DOTNET_CLI_TELEMETRY_OPTOUT = "true"
-    dotnet publish `
-        --self-contained true `
-        --runtime win-x86 `
+    dotnet build `
         --configuration Release `
-        --output $outDir `
-        /property:PublishSingleFile=true `
-        /property:IncludeAllContentForSelfExtract=true `
-        /property:PublishTrimmed=true `
-        /property:TrimMode=link `
         /property:DebugType=None `
         /property:Version=$version `
         $slnFile
-    CheckReturnCodeOfPreviousCommand "'dotnet publish' command failed"
-
-    CreateZipArchive $outDir
+    CheckReturnCodeOfPreviousCommand "'dotnet build' command failed"
 }
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
 $root = Resolve-Path "$PSScriptRoot/../.."
+$buildRoot = "$root/build"
+$buildResultsFolder = "$buildRoot/Release/net472"
 $projectName = "BluetoothDevicePairing"
+$buildResultExecutable = "$buildResultsFolder/$projectName.exe"
+$publishFolder = "$buildRoot/Publish"
 
-Publish `
-    -slnFile $root/$projectName.sln `
-    -version (GetVersion) `
-    -outDir $root/build/Publish/$projectName
+Build -slnFile $root/$projectName.sln -version (GetVersion)
+ForceCopy $buildResultExecutable $publishFolder
+CreateZipArchive "$publishFolder/${projectName}.exe" "$publishFolder/${projectName}.zip"
