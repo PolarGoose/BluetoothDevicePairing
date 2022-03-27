@@ -1,9 +1,8 @@
-namespace BluetoothDevicePairing.Bluetooth.Devices
+namespace BluetoothDevicePairing.Bluetooth.Devices;
+
+internal sealed class DeviceMacAddress : MacAddress
 {
-    internal sealed class DeviceMacAddress : MacAddress
+    public DeviceMacAddress(string mac) : base(mac)
     {
-        public DeviceMacAddress(string mac) : base(mac)
-        {
-        }
     }
 }

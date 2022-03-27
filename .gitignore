@@ -1,3 +1,4 @@
 /build/
 .vs/
 /src/FodyWeavers.xsd
+/.idea

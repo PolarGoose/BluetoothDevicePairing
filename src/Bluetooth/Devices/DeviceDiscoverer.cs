@@ -4,51 +4,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace BluetoothDevicePairing.Bluetooth.Devices
+namespace BluetoothDevicePairing.Bluetooth.Devices;
+
+internal sealed class DiscoveryTime
 {
-    internal class DiscoveryTime
+    public int Seconds { get; }
+
+    public DiscoveryTime(int timeInSeconds)
     {
-        public int Seconds { get; }
-
-        public DiscoveryTime(int timeInSeconds)
+        if (timeInSeconds is < 1 or > 30)
         {
-            if (timeInSeconds < 1 || timeInSeconds > 30)
-            {
-                throw new Exception($"discovery time should be in range [1; 30] but was {timeInSeconds}");
-            }
-
-            Seconds = timeInSeconds;
+            throw new Exception($"discovery time should be in range [1; 30] but was {timeInSeconds}");
         }
+
+        Seconds = timeInSeconds;
+    }
+}
+
+internal static class DeviceDiscoverer
+{
+    public static List<Device> DiscoverBluetoothDevices(DiscoveryTime time)
+    {
+        return Discover(AsqFilter.BluetoothDevicesFilter(), time);
     }
 
-    internal static class DeviceDiscoverer
+    public static List<Device> DiscoverPairedBluetoothDevices(DiscoveryTime time)
     {
-        public static List<Device> DiscoverBluetoothDevices(DiscoveryTime time)
-        {
-            return Discover(AsqFilter.BluetoothDevicesFilter(), time);
-        }
+        return Discover(AsqFilter.PairedBluetoothDevicesFilter(), time);
+    }
 
-        public static List<Device> DiscoverPairedBluetoothDevices(DiscoveryTime time)
-        {
-            return Discover(AsqFilter.PairedBluetoothDevicesFilter(), time);
-        }
+    private static List<Device> Discover(AsqFilter filter, DiscoveryTime time)
+    {
+        Console.WriteLine($"Start discovering devices for {time.Seconds} seconds");
 
-        private static List<Device> Discover(AsqFilter filter, DiscoveryTime time)
-        {
-            Console.WriteLine($"Start discovering devices for {time.Seconds} seconds");
+        var watcher = new DeviceWatcher(filter);
+        watcher.Start();
+        Thread.Sleep(time.Seconds * 1000);
+        var devices = watcher.Stop();
+        return devices.Select(CreateDevice).ToList();
+    }
 
-            var watcher = new DeviceWatcher(filter);
-            watcher.Start();
-            Thread.Sleep(time.Seconds * 1000);
-            var devices = watcher.Stop();
-            return devices.Select(info => CreateDevice(info)).ToList();
-        }
-
-        private static Device CreateDevice(Windows.Devices.Enumeration.DeviceInformation info)
-        {
-            return new DeviceInfoId(info).DeviceType == DeviceType.Bluetooth
-                ? BluetoothDevice.FromDeviceInfo(info)
-                : BluetoothLeDevice.FromDeviceInfo(info);
-        }
+    private static Device CreateDevice(Windows.Devices.Enumeration.DeviceInformation info)
+    {
+        return new DeviceInfoId(info).DeviceType == DeviceType.Bluetooth
+            ? BluetoothDevice.FromDeviceInfo(info)
+            : BluetoothLeDevice.FromDeviceInfo(info);
     }
 }

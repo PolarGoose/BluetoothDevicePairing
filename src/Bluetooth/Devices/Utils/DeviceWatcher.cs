@@ -3,63 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace BluetoothDevicePairing.Bluetooth.Devices.Utils
+namespace BluetoothDevicePairing.Bluetooth.Devices.Utils;
+
+internal sealed class DeviceWatcher
 {
-    internal sealed class DeviceWatcher
+    private readonly Windows.Devices.Enumeration.DeviceWatcher watcher;
+    private readonly AutoResetEvent watcherStoppedEvent = new(false);
+    private List<Windows.Devices.Enumeration.DeviceInformation> devices;
+
+    public DeviceWatcher(AsqFilter filter)
     {
-        private readonly Windows.Devices.Enumeration.DeviceWatcher watcher;
-        private readonly AutoResetEvent watcherStoppedEvent = new(false);
-        private List<Windows.Devices.Enumeration.DeviceInformation> devices;
+        watcher = Windows.Devices.Enumeration.DeviceInformation.CreateWatcher(filter.Query,
+                                                                              null,
+                                                                              Windows.Devices.Enumeration.DeviceInformationKind.AssociationEndpoint);
 
-        public DeviceWatcher(AsqFilter filter)
+        watcher.Added += (_, info) => devices.Add(info);
+
+        watcher.Removed += (_, removedDevice) =>
         {
-            watcher = Windows.Devices.Enumeration.DeviceInformation.CreateWatcher(filter.Query,
-                                                                                  null,
-                                                                                  Windows.Devices.Enumeration.DeviceInformationKind.AssociationEndpoint);
-
-            watcher.Added += (s, info) =>
+            foreach (var device in devices.Where(device => device.Id == removedDevice.Id))
             {
-                devices.Add(info);
-            };
-
-            watcher.Removed += (s, removedDevice) =>
-            {
-                foreach (var device in devices.Where(device => device.Id == removedDevice.Id))
-                {
-                    devices.Remove(device);
-                }
-            };
-
-            watcher.Updated += (s, updatedDevice) =>
-            {
-                foreach (var device in devices.Where(device => device.Id == updatedDevice.Id))
-                {
-                    device.Update(updatedDevice);
-                }
-            };
-
-            watcher.Stopped += (s, o) =>
-            {
-                watcherStoppedEvent.Set();
-            };
-        }
-
-        public void Start()
-        {
-            devices = new();
-            watcher.Start();
-        }
-
-        public List<Windows.Devices.Enumeration.DeviceInformation> Stop()
-        {
-            watcher.Stop();
-            var receivedSignal = watcherStoppedEvent.WaitOne(5 * 1000);
-            if (!receivedSignal)
-            {
-                Console.WriteLine("Warning: the watcher didn't stop after 5 seconds");
+                devices.Remove(device);
             }
+        };
 
-            return devices;
+        watcher.Updated += (_, updatedDevice) =>
+        {
+            foreach (var device in devices.Where(device => device.Id == updatedDevice.Id))
+            {
+                device.Update(updatedDevice);
+            }
+        };
+
+        watcher.Stopped += (_, _) => watcherStoppedEvent.Set();
+    }
+
+    public void Start()
+    {
+        devices = new();
+        watcher.Start();
+    }
+
+    public IEnumerable<Windows.Devices.Enumeration.DeviceInformation> Stop()
+    {
+        watcher.Stop();
+        var receivedSignal = watcherStoppedEvent.WaitOne(5 * 1000);
+        if (!receivedSignal)
+        {
+            Console.WriteLine("Warning: the watcher didn't stop after 5 seconds");
         }
+
+        return devices;
     }
 }

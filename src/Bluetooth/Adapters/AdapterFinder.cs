@@ -2,32 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BluetoothDevicePairing.Bluetooth.Adapter
+namespace BluetoothDevicePairing.Bluetooth.Adapters;
+
+internal static class AdapterFinder
 {
-    internal static class AdapterFinder
+    public static IEnumerable<Adapter> FindBluetoothAdapters()
     {
-        public static Adapter FindDefaultAdapter()
-        {
-            return FindBluetoothAdapters().Where(adapter => adapter.IsDefault).Single();
-        }
+        var macOfDefaultAdapter = GetMacAddressOfDefaultAdapter();
+        return Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(Windows.Devices.Bluetooth.BluetoothAdapter.GetDeviceSelector()).GetAwaiter().GetResult()
+                                                            .Select(info => new Adapter(info, macOfDefaultAdapter))
+                                                            .ToList();
+    }
 
-        public static IEnumerable<Adapter> FindBluetoothAdapters()
-        {
-            var macOfDefaultAdapter = GetMacAddressOfDefaultAdapter();
-            return Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(Windows.Devices.Bluetooth.BluetoothAdapter.GetDeviceSelector()).GetAwaiter().GetResult()
-                                                                .Select(info => new Adapter(info, macOfDefaultAdapter))
-                                                                .ToList();
-        }
+    private static AdapterMacAddress GetMacAddressOfDefaultAdapter()
+    {
+        var defaultAdapter = GetDefaultAdapter();
+        return new(defaultAdapter);
+    }
 
-        private static AdapterMacAddress GetMacAddressOfDefaultAdapter()
-        {
-            var defaultAdapter = GetDefaultAdapter();
-            return new(defaultAdapter);
-        }
-
-        private static Windows.Devices.Bluetooth.BluetoothAdapter GetDefaultAdapter()
-        {
-            return Windows.Devices.Bluetooth.BluetoothAdapter.GetDefaultAsync().GetAwaiter().GetResult();
-        }
+    private static Windows.Devices.Bluetooth.BluetoothAdapter GetDefaultAdapter()
+    {
+        return Windows.Devices.Bluetooth.BluetoothAdapter.GetDefaultAsync().GetAwaiter().GetResult();
     }
 }

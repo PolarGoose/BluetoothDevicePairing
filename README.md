@@ -53,7 +53,7 @@ The program uses
 * [Windows.Devices.Enumeration API](https://docs.microsoft.com/en-us/uwp/api/Windows.Devices.Enumeration?redirectedfrom=MSDN&view=winrt-22000) to work with Bluetooth.
 * [Costura Fody](https://github.com/Fody/Costura) to create a single file executable.
 
-## Device pairing by name
+### Device pairing by name
 In order to pair a device by name, the utility starts with discovering all available devices and tries to find a device with the required name. After a device is found its mac address is used to request pairing. The command will fail if there are several devices with the same name.
 
 # Return values
