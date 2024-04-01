@@ -80,7 +80,7 @@ We're going to make a simple "Connect" script:
 .\BluetoothDevicePairing.exe pair-by-mac --type <TYPE> --mac <MAC>
 ```
 
-8. Replace `<MAC>` with mac of your device and `<TYPE>` with `BluetoothLE` for `LE-devices` and `Bluetooth` for the rest.
+8. Replace `<MAC>` with mac of your device and `<TYPE>` with `BluetoothLE` for LE-devices and `Bluetooth` for the rest.
 
 ![изображение](https://github.com/dkgitdev/BluetoothDevicePairing/assets/36101416/93beb6a5-a4a0-4aa2-b023-f43dc027f48e)
 
