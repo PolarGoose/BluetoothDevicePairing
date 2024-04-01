@@ -84,7 +84,7 @@ We're going to make a simple "Connect" script:
 
 ![изображение](https://github.com/dkgitdev/BluetoothDevicePairing/assets/36101416/93beb6a5-a4a0-4aa2-b023-f43dc027f48e)
 
-10. Save file with a name ending with `.bat` (like `connect left joy-con.bat`) in the folder with `BluetoothDevicePairing.exe` (`Bluetooth-Scripts` in `Documents in our example`)
+10. Save file with a name ending with `.bat` (like `connect left joy-con.bat`) in the folder with `BluetoothDevicePairing.exe` (`Bluetooth-Scripts` in `Documents in our example`). If it asks if you are sure to save file with such name, select yes.
 
 ![изображение](https://github.com/dkgitdev/BluetoothDevicePairing/assets/36101416/4537f473-a5b3-4f6e-b1bd-133beefeb3e2)
 
