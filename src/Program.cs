@@ -1,6 +1,6 @@
+using System;
 using BluetoothDevicePairing.Commands;
 using CommandLine;
-using System;
 
 static void ParseCommandLineAndExecuteActions(string[] args)
 {
@@ -9,12 +9,16 @@ static void ParseCommandLineAndExecuteActions(string[] args)
                                       PairDeviceByNameOptions,
                                       UnpairDeviceByMacOptions,
                                       UnpairDeviceByNameOptions,
+                                      DisconnectBluetoothAudioDeviceByNameOptions,
+                                      DisconnectBluetoothAudioDeviceByMacOptions,
                                       ListAdaptersOptions>(args)
           .WithParsed<DiscoverDevicesOptions>(DiscoverDevices.Execute)
           .WithParsed<PairDeviceByMacOptions>(PairDeviceByMac.Execute)
           .WithParsed<PairDeviceByNameOptions>(PairDeviceByName.Execute)
           .WithParsed<UnpairDeviceByMacOptions>(UnPairDeviceByMac.Execute)
           .WithParsed<UnpairDeviceByNameOptions>(UnPairDeviceByName.Execute)
+          .WithParsed<DisconnectBluetoothAudioDeviceByNameOptions>(DisconnectBluetoothAudioDeviceByName.Execute)
+          .WithParsed<DisconnectBluetoothAudioDeviceByMacOptions>(DisconnectBluetoothAudioDeviceByMac.Execute)
           .WithParsed<ListAdaptersOptions>(ListAdapters.Execute);
 }
 

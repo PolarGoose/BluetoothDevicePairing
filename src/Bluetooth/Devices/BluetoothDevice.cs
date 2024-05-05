@@ -12,6 +12,22 @@ internal sealed class BluetoothDevice : Device
         this.device = device;
     }
 
+    public void ConnectAssociatedAudioDevices()
+    {
+        foreach (var audioDevice in AssociatedAudioDevices)
+        {
+            audioDevice.Connect();
+        }
+    }
+
+    public void DisconnectAssociatedAudioDevices()
+    {
+        foreach (var audioDevice in AssociatedAudioDevices)
+        {
+            audioDevice.Disconnect();
+        }
+    }
+
     public static BluetoothDevice FromDeviceInfo(Windows.Devices.Enumeration.DeviceInformation info)
     {
         return new BluetoothDevice(Windows.Devices.Bluetooth.BluetoothDevice.FromIdAsync(info.Id).GetAwaiter().GetResult());

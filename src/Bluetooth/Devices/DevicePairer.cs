@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 
 namespace BluetoothDevicePairing.Bluetooth.Devices;
 
@@ -6,7 +7,7 @@ internal static class DevicePairer
 {
     public static void PairDevice(Device device, string pinCode)
     {
-        Console.WriteLine($"Request to pair device \"{device}\"");
+        Console.WriteLine($"Request to pair device [{device}]");
 
         if (device.ConnectionStatus == ConnectionStatus.Connected)
         {
@@ -15,7 +16,17 @@ internal static class DevicePairer
 
         if (device.ConnectionStatus == ConnectionStatus.Paired)
         {
-            throw new Exception("Device is already paired");
+            if (!device.AssociatedAudioDevices.Any())
+            {
+                throw new Exception("Device is already paired");
+            }
+
+            Console.WriteLine("Device is already paired. Connecting associated audio devices");
+            foreach (var audioDevice in device.AssociatedAudioDevices)
+            {
+                audioDevice.Connect();
+            }
+            return;
         }
 
         Console.WriteLine("Start pairing");

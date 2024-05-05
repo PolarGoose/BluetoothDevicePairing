@@ -1,3 +1,7 @@
+using BluetoothDevicePairing.Bluetooth.Devices.AudioDevices;
+using System;
+using System.Collections.Generic;
+
 namespace BluetoothDevicePairing.Bluetooth.Devices;
 
 internal enum ConnectionStatus
@@ -27,11 +31,13 @@ internal abstract class Device
     public Windows.Devices.Enumeration.DeviceInformationPairing PairingInfo => info.Pairing;
     public DeviceInfoId Id { get; }
     public string Name => info.Name;
+    public IEnumerable<AudioDevice> AssociatedAudioDevices;
 
     protected Device(Windows.Devices.Enumeration.DeviceInformation info)
     {
         this.info = info;
         Id = new DeviceInfoId(info);
+        AssociatedAudioDevices = AudioDeviceEnumerator.GetAudioDevices((Guid)info.Properties["System.Devices.Aep.ContainerId"]);
     }
 
     public override string ToString()

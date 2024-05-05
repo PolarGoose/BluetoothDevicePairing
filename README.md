@@ -1,11 +1,10 @@
 # BluetoothDevicePairing
 Console utility to discover and pair Bluetooth and Bluetooth Low Energy devices.
-
-# Note on connecting to Bluetooth devices
-If you pair a device that is not already paired, the utility will also connect to it (this is the default behavior of Windows Bluetooth API)<br>
-However, the pairing will fail if a device is paired but not connected.<br>
-Unfortunately, it is impossible to simulate what the "Connect" button from Windows `Bluetooth and Other devices` dialog does.
-More details can be found here: [How to connect to a paired audio Bluetooth device](https://stackoverflow.com/questions/62502414/how-to-connect-to-a-paired-audio-bluetooth-device-using-windows-uwp-api). Specifically, [here](https://github.com/inthehand/32feet/issues/132#issuecomment-1019786324) I have described my failed attempts to implement this functionality.<br>
+The utility also allows to connect and disconnect from audio Bluetooth devices.
+* If you pair a device that is not already paired, the utility will also connect to it (this is the default behavior of Windows Bluetooth API)<br>
+* If you pair to an already paired audio Bluetooth device, the utility will connect to it.
+* Managing Bluetooth devices by mac is much faster than by name, because it doesn't require device discovery.
+* When managing Bluetooth devices by name, you can use the `--discovery-time` parameter to change the time spend on device discovery.
 
 # System requirements
 Windows 10 1809 (10.0.17763) or higher
@@ -47,6 +46,14 @@ BluetoothDevicePairing.exe unpair-by-name --name "MX Ergo" --type BluetoothLE
 ```
 BluetoothDevicePairing.exe list-adapters
 ```
+* Disconnect an audio device using its Mac address:
+```
+BluetoothDevicePairing.exe disconnect-bluetooth-audio-device-by-name --name WH-1000XM5
+```
+* Disconnect to an audio device using its name:
+```
+BluetoothDevicePairing.exe disconnect-bluetooth-audio-device-by-mac --mac 88:c9:e8:17:5e:0f
+```
 
 # Examples of scripts
 The BluetoothDevicePairing utility can be used in bat and PowerShell scripts.
@@ -70,11 +77,6 @@ if %ErrorLevel% NEQ 0 (
 )
 ```
 
-# How it works
-The program uses
-* [Windows.Devices.Enumeration API](https://docs.microsoft.com/en-us/uwp/api/Windows.Devices.Enumeration?redirectedfrom=MSDN&view=winrt-22000) to work with Bluetooth.
-* [Costura Fody](https://github.com/Fody/Costura) to create a single file executable.
-
 ### Device pairing by name
 To pair a device by name, the utility starts by discovering all available devices and tries to find a device with the required name. After a device is found, its Mac address is used to request pairing. The command will fail if there are several devices with the same name.
 
@@ -83,8 +85,9 @@ If the command fails, it returns the value `-1`. If it succeeds, it returns `0`.
 
 # Build
 * Use `Visual Studio 2022` to open the solution file and work with the code
-* Run `.github/workflows/build.ps1` to build a release (to run this script, `git.exe` should be in your PATH)
+* Run `build.ps1` to build a release (to run this script, `git.exe` should be in your PATH)
 
 # References
 * [Windows.Devices.Enumeration API usage examples](https://github.com/microsoft/Windows-universal-samples/tree/master/Samples/DeviceEnumerationAndPairing)
 * [Windows.Devices.Enumeration Namespace](https://docs.microsoft.com/en-us/uwp/api/Windows.Devices.Enumeration)
+* [ToothTray](https://github.com/m2jean/ToothTray/tree/master) - reference implementation of connecting to Bluetooth audio devices

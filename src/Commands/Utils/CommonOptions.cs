@@ -6,7 +6,7 @@ internal class DeviceTypeOption
 {
     [Option("type",
             Required = true,
-            HelpText = "(case sensitive) type of a bluetooth device. Possible values: \"Bluetooth\", \"BluetoothLE\"")]
+            HelpText = "(case sensitive) type of a Bluetooth device. Possible values: \"Bluetooth\", \"BluetoothLE\"")]
     public Bluetooth.Devices.DeviceType DeviceType { get; set; }
 }
 
@@ -14,7 +14,7 @@ internal class MacAndDeviceTypeOptions : DeviceTypeOption
 {
     [Option("mac",
             Required = true,
-            HelpText = "mac address of a bluetooth device. For example: 12:34:56:78:9A:BC")]
+            HelpText = "mac address of a Bluetooth device. For example: 12:34:56:78:9A:BC")]
     public string Mac { get; set; }
 }
 
@@ -27,6 +27,6 @@ internal class PairAndUnpairDeviceByNameOptions : DeviceTypeOption
 
     [Option("name",
             Required = true,
-            HelpText = "(case sensitive) name of a bluetooth device")]
+            HelpText = "(case sensitive) name of a Bluetooth device")]
     public string DeviceName { get; set; }
 }

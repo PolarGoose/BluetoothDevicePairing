@@ -9,8 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{F4EA3749
 		.editorconfig = .editorconfig
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
-		.github\workflows\build.ps1 = .github\workflows\build.ps1
-		.github\workflows\continuous-integration-workflow.yaml = .github\workflows\continuous-integration-workflow.yaml
+		build.ps1 = build.ps1
+		.github\workflows\main.yaml = .github\workflows\main.yaml
 		README.md = README.md
 	EndProjectSection
 EndProject

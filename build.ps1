@@ -40,29 +40,24 @@ Function ForceCopy($file, $dstFolder) {
     Copy-Item $buildResultExecutable -Destination $publishFolder -Force
 }
 
-Function Build($slnFile, $version) {
-    Info "Run 'dotnet build' command: `n slnFile=$slnFile `n version='$version'"
-
-    $Env:DOTNET_NOLOGO = "true"
-    $Env:DOTNET_CLI_TELEMETRY_OPTOUT = "true"
-    dotnet build `
-        --configuration Release `
-        /property:DebugType=None `
-        /property:Version=$version `
-        $slnFile
-    CheckReturnCodeOfPreviousCommand "'dotnet build' command failed"
-}
-
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$root = Resolve-Path "$PSScriptRoot/../.."
+$root = Resolve-Path "$PSScriptRoot"
 $buildRoot = "$root/build"
 $buildResultsFolder = "$buildRoot/Release/net472"
 $projectName = "BluetoothDevicePairing"
 $buildResultExecutable = "$buildResultsFolder/$projectName.exe"
 $publishFolder = "$buildRoot/Publish"
+$version = GetVersion
 
-Build -slnFile $root/$projectName.sln -version (GetVersion)
+Info "Run 'dotnet build'. version=$version"
+dotnet build `
+    --configuration Release `
+    /property:DebugType=None `
+    /property:Version=$version `
+    $root/BluetoothDevicePairing.sln
+CheckReturnCodeOfPreviousCommand "'dotnet build' command failed"
+
 ForceCopy $buildResultExecutable $publishFolder
-CreateZipArchive "$publishFolder/${projectName}.exe" "$publishFolder/${projectName}.zip"
+CreateZipArchive $publishFolder/BluetoothDevicePairing.exe $publishFolder/BluetoothDevicePairing.zip

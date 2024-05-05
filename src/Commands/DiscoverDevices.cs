@@ -32,6 +32,17 @@ internal static class DiscoverDevices
     private static void PrintDevice(Device d)
     {
         Console.WriteLine($"|{GetType(d),2}|{d.Id.DeviceMac}|{GetConnectionStatus(d),-9}|{GetName(d),-40}|");
+
+        if (!d.AssociatedAudioDevices.Any())
+        {
+            return;
+        }
+
+        Console.WriteLine($"|  |                 |         |  Associated audio devices:             |");
+        foreach (var audioDevice in d.AssociatedAudioDevices)
+        {
+            Console.WriteLine($"|  |                 |         |  * {audioDevice.Name,-36}|");
+        }
     }
 
     private static string GetType(Device d)
