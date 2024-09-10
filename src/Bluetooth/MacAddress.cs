@@ -1,3 +1,4 @@
+using BluetoothDevicePairing.Utils;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -14,7 +15,7 @@ internal class MacAddress
         var match = Regex.Match(mac, @"^(..:){5}(..)$");
         if (!match.Success)
         {
-            throw new Exception($"MacAddress address '{mac}' is not a valid mac address");
+            throw new AppException($"MacAddress address '{mac}' is not a valid mac address");
         }
         Address = mac;
         RawAddress = Convert.ToUInt64(Address.Replace(":", ""), 16);

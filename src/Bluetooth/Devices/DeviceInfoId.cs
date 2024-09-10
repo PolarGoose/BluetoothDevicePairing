@@ -1,6 +1,7 @@
 using System;
 using System.Text.RegularExpressions;
 using BluetoothDevicePairing.Bluetooth.Adapters;
+using BluetoothDevicePairing.Utils;
 
 namespace BluetoothDevicePairing.Bluetooth.Devices;
 
@@ -15,7 +16,7 @@ internal sealed class DeviceInfoId
         var match = Regex.Match(info.Id, @"(^\w+)#(?<Type>Bluetooth|BluetoothLE)(?<AdapterMac>(..:){5}(..))-(?<DeviceMac>(..:){5}(..))$");
         if (!match.Success)
         {
-            throw new Exception($"Failed to parse DeviceInformation.Id '{info.Id}'");
+            throw new AppException($"Failed to parse DeviceInformation.Id '{info.Id}'");
         }
 
         DeviceType = match.Groups["Type"].Value == "Bluetooth" ? DeviceType.Bluetooth : DeviceType.BluetoothLE;

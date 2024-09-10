@@ -1,5 +1,6 @@
 using System;
 using BluetoothDevicePairing.Commands;
+using BluetoothDevicePairing.Utils;
 using CommandLine;
 
 static void ParseCommandLineAndExecuteActions(string[] args)
@@ -27,8 +28,13 @@ try
     ParseCommandLineAndExecuteActions(args);
     return 0;
 }
-catch (Exception ex)
+catch (AppException ex)
 {
     Console.WriteLine($"Failed: {ex.Message}");
+    return -1;
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Unexpected failure: {ex}");
     return -1;
 }

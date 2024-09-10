@@ -1,3 +1,4 @@
+using BluetoothDevicePairing.Utils;
 using System;
 
 namespace BluetoothDevicePairing.Bluetooth.Devices;
@@ -21,7 +22,7 @@ internal class BluetoothLeDevice : Device
     {
         var device = Windows.Devices.Bluetooth.BluetoothLEDevice.FromBluetoothAddressAsync(mac.RawAddress).GetAwaiter().GetResult();
         return device == null
-            ? throw new Exception($"Can't create a BluetoothLE device from the provided mac address '{mac}'. Device with this mac address doesn't exist")
+            ? throw new AppException($"Can't create a BluetoothLE device from the provided mac address '{mac}'. Device with this mac address doesn't exist")
             : new BluetoothLeDevice(device);
     }
 }

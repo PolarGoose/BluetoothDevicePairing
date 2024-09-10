@@ -1,8 +1,11 @@
 using BluetoothDevicePairing.Bluetooth.Devices.Utils;
+using BluetoothDevicePairing.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using static Vanara.PInvoke.Ole32.PROPERTYKEY.System;
+using static Vanara.PInvoke.User32;
 
 namespace BluetoothDevicePairing.Bluetooth.Devices;
 
@@ -14,7 +17,7 @@ internal sealed class DiscoveryTime
     {
         if (timeInSeconds is < 1 or > 30)
         {
-            throw new Exception($"discovery time should be in range [1; 30] but was {timeInSeconds}");
+            throw new AppException($"discovery time should be in range [1; 30] but was {timeInSeconds}");
         }
 
         Seconds = timeInSeconds;
@@ -41,13 +44,23 @@ internal static class DeviceDiscoverer
         watcher.Start();
         Thread.Sleep(time.Seconds * 1000);
         var devices = watcher.Stop();
-        return devices.Select(CreateDevice).ToList();
+        return devices.Select(CreateDevice).OfType<Device>().ToList();
     }
 
     private static Device CreateDevice(Windows.Devices.Enumeration.DeviceInformation info)
     {
-        return new DeviceInfoId(info).DeviceType == DeviceType.Bluetooth
-            ? BluetoothDevice.FromDeviceInfo(info)
-            : BluetoothLeDevice.FromDeviceInfo(info);
+        try
+        {
+            // This can throw the following exception:
+            //     System.ArgumentException: The parameter is incorrect. The provided device ID is not a valid BluetoothDevice object.
+            return new DeviceInfoId(info).DeviceType == DeviceType.Bluetooth
+                ? BluetoothDevice.FromDeviceInfo(info)
+                : BluetoothLeDevice.FromDeviceInfo(info);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Warning: failed to get information from the discovered device [{info.Name}; {info.Id}]. Error message: {ex.Message}");
+            return null;
+        }
     }
 }

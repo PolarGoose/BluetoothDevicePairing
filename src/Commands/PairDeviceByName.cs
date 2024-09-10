@@ -1,5 +1,6 @@
 using BluetoothDevicePairing.Bluetooth.Devices;
 using BluetoothDevicePairing.Commands.Utils;
+using BluetoothDevicePairing.Utils;
 using CommandLine;
 using System;
 
@@ -29,10 +30,10 @@ internal static class PairDeviceByName
                 DevicePairer.PairDevice(devices[0], opts.PinCode);
                 return;
             case 2:
-                throw new Exception(
+                throw new AppException(
                     $"2 devices with the name '{opts.DeviceName}' found \n 1 - \"{devices[0]}\" \n 2 - \"{devices[1]}\". Don't know which one to choose.");
             default:
-                throw new Exception(
+                throw new AppException(
                     $"{devices.Count} devices with the name '{opts.DeviceName}' found. Don't know which one to choose");
         }
     }

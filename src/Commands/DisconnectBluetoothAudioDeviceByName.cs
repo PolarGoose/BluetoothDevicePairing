@@ -1,5 +1,6 @@
 using BluetoothDevicePairing.Bluetooth.Devices;
 using BluetoothDevicePairing.Commands.Utils;
+using BluetoothDevicePairing.Utils;
 using CommandLine;
 using System;
 
@@ -20,7 +21,7 @@ internal static class DisconnectBluetoothAudioDeviceByName
                                                      opts.DeviceType);
         if (devices.Count > 1)
         {
-            throw new Exception($"{devices.Count} devices found, don't know which one to choose");
+            throw new AppException($"{devices.Count} devices found, don't know which one to choose");
         }
 
         AudioDeviceDisconnector.DisconnectBluetoothAudioDevice(devices[0]);

@@ -1,3 +1,4 @@
+using BluetoothDevicePairing.Utils;
 using System;
 using System.Linq;
 
@@ -11,14 +12,14 @@ internal static class DevicePairer
 
         if (device.ConnectionStatus == ConnectionStatus.Connected)
         {
-            throw new Exception("Device is already connected, no need to pair");
+            throw new AppException("Device is already connected, no need to pair");
         }
 
         if (device.ConnectionStatus == ConnectionStatus.Paired)
         {
             if (!device.AssociatedAudioDevices.Any())
             {
-                throw new Exception("Device is already paired");
+                throw new AppException("Device is already paired");
             }
 
             Console.WriteLine("Device is already paired. Connecting associated audio devices");
@@ -53,7 +54,7 @@ internal static class DevicePairer
                                     .GetAwaiter().GetResult().Status;
         if (res != Windows.Devices.Enumeration.DevicePairingResultStatus.Paired)
         {
-            throw new Exception($"Failed to pair device. Status = {res}");
+            throw new AppException($"Failed to pair device. Status = {res}");
         }
     }
 
@@ -82,7 +83,7 @@ internal static class DevicePairer
 
             default:
                 Console.WriteLine($"Unexpected pairing type: {args.PairingKind}");
-                throw new Exception();
+                throw new AppException();
         }
     }
 }

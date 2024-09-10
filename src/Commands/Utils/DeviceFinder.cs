@@ -1,4 +1,5 @@
 using BluetoothDevicePairing.Bluetooth.Devices;
+using BluetoothDevicePairing.Utils;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +11,7 @@ internal static class DeviceFinder
     {
         var res = devices.FindAll(d => d.Name == name && deviceType == d.Id.DeviceType);
         return res.Count == 0
-                   ? throw new Exception($"Couldn't find any devices with '{name}' name and device type '{deviceType}'")
+                   ? throw new AppException($"Couldn't find any devices with '{name}' name and device type '{deviceType}'")
                    : res;
     }
 
