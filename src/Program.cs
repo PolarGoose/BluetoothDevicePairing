@@ -10,6 +10,8 @@ static void ParseCommandLineAndExecuteActions(string[] args)
                                       PairDeviceByNameOptions,
                                       UnpairDeviceByMacOptions,
                                       UnpairDeviceByNameOptions,
+                                      ConnectBluetoothAudioDeviceByNameOptions,
+                                      ConnectBluetoothAudioDeviceByMacOptions,
                                       DisconnectBluetoothAudioDeviceByNameOptions,
                                       DisconnectBluetoothAudioDeviceByMacOptions,
                                       ListAdaptersOptions>(args)
@@ -18,6 +20,8 @@ static void ParseCommandLineAndExecuteActions(string[] args)
           .WithParsed<PairDeviceByNameOptions>(PairDeviceByName.Execute)
           .WithParsed<UnpairDeviceByMacOptions>(UnPairDeviceByMac.Execute)
           .WithParsed<UnpairDeviceByNameOptions>(UnPairDeviceByName.Execute)
+          .WithParsed<ConnectBluetoothAudioDeviceByNameOptions>(ConnectBluetoothAudioDeviceByName.Execute)
+          .WithParsed<ConnectBluetoothAudioDeviceByMacOptions>(ConnectBluetoothAudioDeviceByMac.Execute)
           .WithParsed<DisconnectBluetoothAudioDeviceByNameOptions>(DisconnectBluetoothAudioDeviceByName.Execute)
           .WithParsed<DisconnectBluetoothAudioDeviceByMacOptions>(DisconnectBluetoothAudioDeviceByMac.Execute)
           .WithParsed<ListAdaptersOptions>(ListAdapters.Execute);
