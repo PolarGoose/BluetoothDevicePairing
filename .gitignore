@@ -1,5 +1,5 @@
 /build/
 .vs/
 /src/FodyWeavers.xsd
-/.idea
+.idea/
 launchSettings.json

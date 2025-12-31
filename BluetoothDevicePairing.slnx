@@ -1,0 +1,11 @@
+<Solution>
+  <Project Path="src/BluetoothDevicePairing.csproj" />
+  <Folder Name="/Files/">
+    <File Path=".editorconfig" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="build.ps1" />
+    <File Path="README.md" />
+    <File Path=".github/workflows/main.yaml" />
+  </Folder>
+</Solution>

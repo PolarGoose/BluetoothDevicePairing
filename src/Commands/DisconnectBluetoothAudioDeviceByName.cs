@@ -2,7 +2,6 @@ using BluetoothDevicePairing.Bluetooth.Devices;
 using BluetoothDevicePairing.Commands.Utils;
 using BluetoothDevicePairing.Utils;
 using CommandLine;
-using System;
 
 namespace BluetoothDevicePairing.Commands;
 

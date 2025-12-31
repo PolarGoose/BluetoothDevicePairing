@@ -1,5 +1,3 @@
-using System;
-
 namespace BluetoothDevicePairing.Bluetooth.Devices;
 
 internal sealed class BluetoothDevice : Device

@@ -1,5 +1,3 @@
-using System;
-
 namespace BluetoothDevicePairing.Bluetooth.Adapters;
 
 internal sealed class Adapter

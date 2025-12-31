@@ -1,6 +1,4 @@
 using BluetoothDevicePairing.Bluetooth.Devices.AudioDevices;
-using System;
-using System.Collections.Generic;
 
 namespace BluetoothDevicePairing.Bluetooth.Devices;
 

@@ -1,7 +1,5 @@
 using BluetoothDevicePairing.Bluetooth.Devices;
 using CommandLine;
-using System;
-using System.Linq;
 
 namespace BluetoothDevicePairing.Commands;
 

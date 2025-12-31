@@ -1,6 +1,5 @@
 using System.Runtime.InteropServices;
 using System.Security;
-using System;
 using Vanara.PInvoke;
 
 namespace BluetoothDevicePairing.Bluetooth.Devices.AudioDevices;

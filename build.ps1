@@ -22,7 +22,7 @@ Function CreateZipArchive($file, $archiveFile) {
 Function GetVersion() {
     $gitCommand = Get-Command -Name git
 
-    $nearestTag = & $gitCommand describe --exact-match --tags HEAD
+    try { $nearestTag = & $gitCommand describe --exact-match --tags HEAD 2> $null } catch {}
     if(-Not $?) {
         Info "The commit is not tagged. Use 'v0.0-dev' as a tag instead"
         $nearestTag = "v0.0-dev"
@@ -56,7 +56,7 @@ dotnet build `
     --configuration Release `
     /property:DebugType=None `
     /property:Version=$version `
-    $root/BluetoothDevicePairing.sln
+    $root/BluetoothDevicePairing.slnx
 CheckReturnCodeOfPreviousCommand "'dotnet build' command failed"
 
 ForceCopy $buildResultExecutable $publishFolder

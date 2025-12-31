@@ -1,4 +1,3 @@
-using System;
 using BluetoothDevicePairing.Commands;
 using BluetoothDevicePairing.Utils;
 using CommandLine;

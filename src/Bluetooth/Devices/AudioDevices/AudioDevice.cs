@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.InteropServices;
 using Vanara.PInvoke;
 using static Vanara.PInvoke.CoreAudio;

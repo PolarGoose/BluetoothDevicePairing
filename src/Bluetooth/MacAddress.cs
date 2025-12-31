@@ -1,6 +1,4 @@
 using BluetoothDevicePairing.Utils;
-using System;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace BluetoothDevicePairing.Bluetooth;
@@ -23,10 +21,9 @@ internal class MacAddress
 
     protected MacAddress(ulong mac)
     {
-        Address = string.Join(":", BitConverter.GetBytes(mac)
-                                               .Reverse()
-                                               .Skip(2)
-                                               .Select(b => b.ToString("x2")));
+        var macBytes = BitConverter.GetBytes(mac);
+        Array.Reverse(macBytes);
+        Address = string.Join(":", macBytes.Skip(2).Select(b => b.ToString("x2")));
         RawAddress = mac;
     }
 

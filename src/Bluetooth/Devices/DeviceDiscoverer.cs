@@ -1,11 +1,5 @@
 using BluetoothDevicePairing.Bluetooth.Devices.Utils;
 using BluetoothDevicePairing.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using static Vanara.PInvoke.Ole32.PROPERTYKEY.System;
-using static Vanara.PInvoke.User32;
 
 namespace BluetoothDevicePairing.Bluetooth.Devices;
 

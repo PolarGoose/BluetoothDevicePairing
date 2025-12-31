@@ -1,6 +1,5 @@
-using CommandLine;
-using System;
 using BluetoothDevicePairing.Bluetooth.Adapters;
+using CommandLine;
 
 namespace BluetoothDevicePairing.Commands;
 

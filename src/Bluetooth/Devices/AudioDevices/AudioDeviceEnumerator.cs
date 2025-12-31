@@ -1,7 +1,5 @@
-using static Vanara.PInvoke.CoreAudio;
-using System;
 using Vanara.PInvoke;
-using System.Collections.Generic;
+using static Vanara.PInvoke.CoreAudio;
 
 namespace BluetoothDevicePairing.Bluetooth.Devices.AudioDevices;
 

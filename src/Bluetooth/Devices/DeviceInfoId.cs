@@ -1,7 +1,6 @@
-using System;
-using System.Text.RegularExpressions;
 using BluetoothDevicePairing.Bluetooth.Adapters;
 using BluetoothDevicePairing.Utils;
+using System.Text.RegularExpressions;
 
 namespace BluetoothDevicePairing.Bluetooth.Devices;
 

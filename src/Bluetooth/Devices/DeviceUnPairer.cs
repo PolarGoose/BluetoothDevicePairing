@@ -1,5 +1,4 @@
 using BluetoothDevicePairing.Utils;
-using System;
 
 namespace BluetoothDevicePairing.Bluetooth.Devices;
 
