@@ -32,7 +32,7 @@ internal static class DeviceDiscoverer
 
     private static List<Device> Discover(AsqFilter filter, DiscoveryTime time)
     {
-        Console.WriteLine($"Start discovering devices for {time.Seconds} seconds");
+        Console.Error.WriteLine($"Start discovering devices for {time.Seconds} seconds");
 
         var watcher = new DeviceWatcher(filter);
         watcher.Start();
@@ -53,7 +53,7 @@ internal static class DeviceDiscoverer
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Warning: failed to get information from the discovered device [{info.Name}; {info.Id}]. Error message: {ex.Message}");
+            Console.Error.WriteLine($"Warning: failed to get information from the discovered device [{info.Name}; {info.Id}]. Error message: {ex.Message}");
             return null;
         }
     }
