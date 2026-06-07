@@ -1,6 +1,6 @@
 using BluetoothDevicePairing.Bluetooth.Devices;
 using CommandLine;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace BluetoothDevicePairing.Commands;
 
@@ -41,7 +41,7 @@ internal static class DiscoverDevices
                     isConnected = a.IsConnected
                 }).ToArray()
             });
-            Console.WriteLine(JsonConvert.SerializeObject(jsonData, Formatting.Indented));
+            Console.WriteLine(JsonSerializer.Serialize(jsonData, new JsonSerializerOptions { WriteIndented = true }));
             return;
         }
 

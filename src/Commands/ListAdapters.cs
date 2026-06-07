@@ -1,6 +1,6 @@
 using BluetoothDevicePairing.Bluetooth.Adapters;
 using CommandLine;
-using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace BluetoothDevicePairing.Commands;
 
@@ -31,7 +31,7 @@ internal static class ListAdapters
                 name = a.Name,
                 state = a.State.ToString()
             });
-            Console.WriteLine(JsonConvert.SerializeObject(jsonData, Formatting.Indented));
+            Console.WriteLine(JsonSerializer.Serialize(jsonData, new JsonSerializerOptions { WriteIndented = true }));
             return;
         }
 
