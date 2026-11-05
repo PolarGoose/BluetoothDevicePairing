@@ -1,9 +1,9 @@
 # BluetoothDevicePairing
 Console utility to discover and pair Bluetooth and Bluetooth Low Energy devices.
-The utility also allows connecting and disconnecting from Bluetooth audio devices.
+The utility also lets you connect to and disconnect from Bluetooth audio devices.
 
 # Notes
-* If you pair a device that is not already paired, the utility will also connect to it (this is the default behavior of Windows Bluetooth API)
+* If you pair a device that is not already paired, the utility will also connect to it (this is the default behavior of the Windows Bluetooth API)
 * If you pair an already paired audio Bluetooth device, the utility will connect to it.
 * Managing Bluetooth devices by MAC is much faster than by name, because it doesn't require device discovery.
 * When managing Bluetooth devices by name, you can use the `--discovery-time` parameter to change the time spent on device discovery.
@@ -28,11 +28,11 @@ BluetoothDevicePairing.exe pair-by-mac --mac 12:34:56:78:9A:BC --type Bluetooth
 ```
 BluetoothDevicePairing.exe pair-by-name --name "MX Ergo" --type BluetoothLE
 ```
-* Pair a device using its name and pin code:
+* Pair a device using its name and PIN code:
 ```
 BluetoothDevicePairing.exe pair-by-name --name "Device name" --type BluetoothLE --pin 1234
 ```
-* Pair a device using its MAC and pin code:
+* Pair a device using its MAC and PIN code:
 ```
 BluetoothDevicePairing.exe pair-by-mac --mac 12:34:56:78:9A:BC --type Bluetooth --pin 1234
 ```
@@ -58,36 +58,36 @@ BluetoothDevicePairing.exe disconnect-bluetooth-audio-device-by-mac --mac 88:c9:
 ```
 
 # Examples of scripts
-The BluetoothDevicePairing utility can be used in BAT and PowerShell scripts.
+You can use the BluetoothDevicePairing utility in BAT and PowerShell scripts.
 
 ## Script to pair a Bluetooth device
-The following `bat` script automates the connection of Bluetooth devices.
+The following `bat` script automates connecting Bluetooth devices.
 Before using this script, you need to find out the Bluetooth type and name of your device:
-1. Put the device into the pairing mode
-2. Run the `BluetoothDevicePairing.exe discover` command that will print the required information.
+1. Put the device into pairing mode
+2. Run the `BluetoothDevicePairing.exe discover` command, which will print the required information.
 3. Adapt the script below to use your device's name and Bluetooth type.
 
 How to use the script:
-1. Put the device into a pairing mode
+1. Put the device into pairing mode
 2. Run the script
 ```
 C:\my\apps\BluetoothDevicePairing.exe unpair-by-name --name "MX Ergo" --type BluetoothLE --discovery-time 1
 C:\my\apps\BluetoothDevicePairing.exe pair-by-name --name "MX Ergo" --type BluetoothLE --discovery-time 10
 if %ErrorLevel% NEQ 0 (
-    pause
-    exit /b %errorlevel%
+ pause
+ exit /b %errorlevel%
 )
 ```
 
 # How device pairing by name works
-To pair a device by name, the utility first discovers all available devices and then tries to find one with the required name. After a device is found, its MAC address is used to request pairing. The command will fail if there are several devices with the same name.
+To pair a device by name, the utility first discovers all available devices and then tries to find one with the required name. After it finds a device, it uses its MAC address to request pairing. The command fails if multiple devices have the same name.
 
 # Return values
 If the command fails, it returns the value `-1`. If it succeeds, it returns `0`.
 
 # Build
 * Use `Visual Studio 2026` to open the solution file and work with the code
-* Run `build.ps1` to build a release (to run this script, `git.exe` should be in your PATH)
+* Run `build.ps1` to build a release (`git.exe` should be in your PATH)
 
 # References
 * [Windows.Devices.Enumeration API usage examples](https://github.com/microsoft/Windows-universal-samples/tree/master/Samples/DeviceEnumerationAndPairing)

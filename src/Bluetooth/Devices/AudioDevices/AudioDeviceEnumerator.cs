@@ -86,7 +86,7 @@ internal static class AudioDeviceEnumerator
 
     private static T Activate<T>(IMMDevice device)
     {
-        device.Activate(typeof(T).GUID, Ole32.CLSCTX.CLSCTX_ALL, null, out var itf);
+        device.Activate(typeof(T).GUID, Ole32.CLSCTX.CLSCTX_ALL, IntPtr.Zero, out var itf);
         return (T)itf;
     }
 }

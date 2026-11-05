@@ -6,6 +6,6 @@
     <File Path=".gitignore" />
     <File Path="build.ps1" />
     <File Path="README.md" />
-    <File Path=".github/workflows/main.yaml" />
+    <File Path=".github/workflows/CI.yaml" />
   </Folder>
 </Solution>

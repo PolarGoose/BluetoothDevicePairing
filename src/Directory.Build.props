@@ -1,11 +1,15 @@
 <Project>
   <PropertyGroup>
-    <BuildFolder>$(MSBuildThisFileDirectory)..\build\</BuildFolder>
-    <OutputPath>$(BuildFolder)$(Configuration)\</OutputPath>
-    <BaseIntermediateOutputPath>$(BuildFolder)obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+    <ProjectRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\'))</ProjectRoot>
+    <BuildFolder>$(ProjectRoot)build\</BuildFolder>
+    <OutputPath>$(BuildFolder)$(Platform)\$(Configuration)\$(MSBuildProjectName)\</OutputPath>
+    <BaseIntermediateOutputPath>$(BuildFolder)obj\$(MSBuildProjectName)\$(Platform)\$(Configuration)\</BaseIntermediateOutputPath>
     <LangVersion>latest</LangVersion>
-    <WarningLevel>9999</WarningLevel>
-    <AnalysisLevel>latest</AnalysisLevel>
+    <WarningLevel>5</WarningLevel>
+    <Platforms>AnyCPU</Platforms>
+    <Nullable>disable</Nullable>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <TargetFramework>net472</TargetFramework>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <ImplicitUsings>enable</ImplicitUsings>
     <Version>0.0-dev</Version>

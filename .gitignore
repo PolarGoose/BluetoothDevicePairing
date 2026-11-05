@@ -3,3 +3,4 @@
 /src/FodyWeavers.xsd
 .idea/
 launchSettings.json
+*.user

@@ -1,17 +1,27 @@
 using BluetoothDevicePairing.Commands;
 using BluetoothDevicePairing.Utils;
 using CommandLine;
+using CommandLine.Text;
+using System.Reflection;
 
-static void ParseCommandLineAndExecuteActions(string[] args)
+[assembly: AssemblyCopyright("")]
+[assembly: AssemblyUsage("Console utility to discover and pair Bluetooth and Bluetooth Low Energy devices.")]
+
+static int ParseCommandLineAndExecuteActions(string[] args)
 {
-    _ = Parser.Default.ParseArguments<DiscoverDevicesOptions,
-                                      PairDeviceByMacOptions,
-                                      PairDeviceByNameOptions,
-                                      UnpairDeviceByMacOptions,
-                                      UnpairDeviceByNameOptions,
-                                      DisconnectBluetoothAudioDeviceByNameOptions,
-                                      DisconnectBluetoothAudioDeviceByMacOptions,
-                                      ListAdaptersOptions>(args)
+    if (args.Length == 0)
+    {
+        args = ["--help"];
+    }
+
+    return Parser.Default.ParseArguments<DiscoverDevicesOptions,
+                                         PairDeviceByMacOptions,
+                                         PairDeviceByNameOptions,
+                                         UnpairDeviceByMacOptions,
+                                         UnpairDeviceByNameOptions,
+                                         DisconnectBluetoothAudioDeviceByNameOptions,
+                                         DisconnectBluetoothAudioDeviceByMacOptions,
+                                         ListAdaptersOptions>(args)
           .WithParsed<DiscoverDevicesOptions>(DiscoverDevices.Execute)
           .WithParsed<PairDeviceByMacOptions>(PairDeviceByMac.Execute)
           .WithParsed<PairDeviceByNameOptions>(PairDeviceByName.Execute)
@@ -19,13 +29,17 @@ static void ParseCommandLineAndExecuteActions(string[] args)
           .WithParsed<UnpairDeviceByNameOptions>(UnPairDeviceByName.Execute)
           .WithParsed<DisconnectBluetoothAudioDeviceByNameOptions>(DisconnectBluetoothAudioDeviceByName.Execute)
           .WithParsed<DisconnectBluetoothAudioDeviceByMacOptions>(DisconnectBluetoothAudioDeviceByMac.Execute)
-          .WithParsed<ListAdaptersOptions>(ListAdapters.Execute);
+          .WithParsed<ListAdaptersOptions>(ListAdapters.Execute)
+          .MapResult(
+              _ => 0,
+              errors => errors.All(error => error is HelpRequestedError
+                  or HelpVerbRequestedError
+                  or VersionRequestedError) ? 0 : -1);
 }
 
 try
 {
-    ParseCommandLineAndExecuteActions(args);
-    return 0;
+    return ParseCommandLineAndExecuteActions(args);
 }
 catch (AppException ex)
 {
