@@ -21,7 +21,7 @@ internal static class AudioDeviceEnumerator
                 }
 
                 var connectedToDeviceId = (string)connectedToPart.GetTopologyObject().GetDeviceId();
-                if (!connectedToDeviceId.StartsWith(@"{2}.\\?\bth"))
+                if (!connectedToDeviceId.StartsWith(@"{2}.\\?\bth") && !connectedToDeviceId.StartsWith(@"{2}.\\?\apxenum"))
                 {
                     continue;
                 }
