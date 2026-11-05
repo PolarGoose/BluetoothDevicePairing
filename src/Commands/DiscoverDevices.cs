@@ -1,17 +1,24 @@
 using BluetoothDevicePairing.Bluetooth.Devices;
 using CommandLine;
+using System.Text.Json;
 
 namespace BluetoothDevicePairing.Commands;
 
 [Verb("discover",
-      HelpText = "Discover devices. Prints a table with the following fields:\n" +
-                 "|Device type|Mac address|Pairing status|Device name|")]
+      HelpText = "Discover devices. By default prints a table with the following fields:\n" +
+                 "|Device type|Mac address|Pairing status|Device name|\n" +
+                 "Use --json for machine-readable JSON output.")]
 internal sealed class DiscoverDevicesOptions
 {
     [Option("discovery-time",
             Default = 10,
             HelpText = "how long to search for devices. Units: seconds")]
     public int DiscoveryTime { get; set; }
+
+    [Option("json",
+            Default = false,
+            HelpText = "Output results in JSON format instead of a table")]
+    public bool Json { get; set; }
 }
 
 internal static class DiscoverDevices
@@ -19,6 +26,25 @@ internal static class DiscoverDevices
     public static void Execute(DiscoverDevicesOptions opts)
     {
         var devices = DeviceDiscoverer.DiscoverBluetoothDevices(new DiscoveryTime(opts.DiscoveryTime)).OrderBy(d => d.Name);
+
+        if (opts.Json)
+        {
+            var jsonData = devices.Select(d => new
+            {
+                deviceType = d.Id.DeviceType.ToString(),
+                macAddress = d.Id.DeviceMac.ToString(),
+                pairingStatus = d.ConnectionStatus.ToString(),
+                name = d.Name,
+                associatedAudioDevices = d.AssociatedAudioDevices.Select(a => new
+                {
+                    name = a.Name,
+                    isConnected = a.IsConnected
+                }).ToArray()
+            });
+            Console.WriteLine(JsonSerializer.Serialize(jsonData, new JsonSerializerOptions { WriteIndented = true }));
+            return;
+        }
+
         Console.WriteLine(new string('-', 73));
         foreach (var d in devices)
         {

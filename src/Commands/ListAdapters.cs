@@ -1,20 +1,40 @@
 using BluetoothDevicePairing.Bluetooth.Adapters;
 using CommandLine;
+using System.Text.Json;
 
 namespace BluetoothDevicePairing.Commands;
 
 [Verb("list-adapters",
-      HelpText = "Lists bluetooth adapters. Prints a table with the following fields:\n" +
-                 "|Is default|Radio mac address|Name|State|")]
+      HelpText = "Lists bluetooth adapters. By default prints a table with the following fields:\n" +
+                 "|Is default|Radio mac address|Name|State|\n" +
+                 "Use --json for machine-readable JSON output.")]
 internal sealed class ListAdaptersOptions
 {
+    [Option("json",
+            Default = false,
+            HelpText = "Output results in JSON format instead of a table")]
+    public bool Json { get; set; }
 }
 
 internal static class ListAdapters
 {
-    public static void Execute(ListAdaptersOptions _)
+    public static void Execute(ListAdaptersOptions opts)
     {
         var adapters = AdapterFinder.FindBluetoothAdapters();
+
+        if (opts.Json)
+        {
+            var jsonData = adapters.Select(a => new
+            {
+                isDefault = a.IsDefault,
+                macAddress = a.MacAddress.ToString(),
+                name = a.Name,
+                state = a.State.ToString()
+            });
+            Console.WriteLine(JsonSerializer.Serialize(jsonData, new JsonSerializerOptions { WriteIndented = true }));
+            return;
+        }
+
         Console.WriteLine(new string('-', 71));
         foreach (var a in adapters)
         {

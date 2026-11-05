@@ -45,7 +45,7 @@ internal sealed class DeviceWatcher
         var receivedSignal = watcherStoppedEvent.WaitOne(5 * 1000);
         if (!receivedSignal)
         {
-            Console.WriteLine("Warning: the watcher didn't stop after 5 seconds");
+            Console.Error.WriteLine("Warning: the watcher didn't stop after 5 seconds");
         }
 
         return devices;
